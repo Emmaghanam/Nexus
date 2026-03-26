@@ -356,11 +356,11 @@
       display: flex;
       width: 786px;
       height: 852px;
-      transform: translateX(-393px);
+      transform: translateX(0);
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
       will-change: transform;
     }
-    .screens-wrapper.show-settings { transform: translateX(0); }
+    .screens-wrapper.show-settings { transform: translateX(-393px); }
     .screen {
       width: 393px;
       height: 852px;
@@ -375,7 +375,9 @@
     .screen { scrollbar-width: none; }
 
     /* ── Settings screen ── */
+    .screen-home { order: 1; }
     .screen-settings {
+      order: 2;
       background: #F7F7F8;
       border: 1px solid #e2e8f0;
       border-radius: 10px;
@@ -568,7 +570,7 @@
 
   <div class="screens-wrapper" id="screensWrapper">
 
-  <!-- ════ SETTINGS SCREEN (left) ════ -->
+  <!-- ════ SETTINGS SCREEN (right, hidden initially) ════ -->
   <div class="screen screen-settings" id="settingsScreen">
     <!-- Status bar -->
     <div class="status-bar">
