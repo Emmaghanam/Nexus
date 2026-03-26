@@ -31,8 +31,6 @@
         0 40px 80px rgba(0,0,0,0.6);
       overflow: hidden;
       position: relative;
-      display: flex;
-      flex-direction: column;
     }
 
     /* Noise SVG sits behind everything */
@@ -61,7 +59,7 @@
     }
 
     /* Lift content above bg */
-    .phone > *:not(.phone-bg):not(.notch) {
+    .screen-home > *:not(.phone-bg) {
       position: relative;
       z-index: 1;
     }
@@ -297,8 +295,15 @@
       box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
       display: flex;
       align-items: center;
-      padding: 0 12px 0 36px;
+      padding: 0 36px 0 8px;
       direction: rtl;
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 12px;
+      color: #262626;
+      outline: none;
+    }
+    .ask-bar-input::placeholder {
+      color: #6b6b6b;
     }
     /* Add (+) icon inside input */
     .ask-bar-add-icon {
@@ -345,11 +350,345 @@
       border-radius: 3px;
       opacity: 0.2;
     }
+
+    /* ── Screens slide system ── */
+    .screens-wrapper {
+      display: flex;
+      width: 786px;
+      height: 852px;
+      transform: translateX(-393px);
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .screens-wrapper.show-settings { transform: translateX(0); }
+    .screen {
+      width: 393px;
+      height: 852px;
+      flex-shrink: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .screen { scrollbar-width: none; }
+
+    /* ── Settings screen ── */
+    .screen-settings {
+      background: #F7F7F8;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+    }
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px 0;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .settings-back {
+      width: 32px; height: 32px;
+      background: white;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+      direction: rtl;
+    }
+    .settings-gear {
+      width: 24px; height: 24px;
+      opacity: 0.5;
+    }
+    /* Profile card */
+    .profile-card {
+      margin: 12px 24px;
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 4px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .profile-icon {
+      font-size: 16px;
+      color: #263238;
+      line-height: 1;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .profile-name {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      text-align: right;
+    }
+    .profile-role {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: right;
+      letter-spacing: 0.35px;
+    }
+    /* Section */
+    .settings-divider {
+      height: 2px;
+      margin: 12px 24px;
+      background: linear-gradient(to left, #e2e8f0, transparent);
+      flex-shrink: 0;
+    }
+    .settings-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 4px 24px 8px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .settings-section-icon { width: 24px; height: 24px; }
+    .settings-section-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+    }
+    /* Settings rows */
+    .settings-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      direction: rtl;
+    }
+    .settings-row-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+      width: 160px;
+      text-align: right;
+    }
+    .settings-row-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      line-height: 20px;
+    }
+    .settings-row-desc {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+      line-height: normal;
+    }
+    .settings-badge {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 49px;
+    }
+    /* Toggle */
+    .toggle {
+      width: 51px;
+      height: 31px;
+      border-radius: 15.5px;
+      background: #e9e9ea;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid #eee;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .toggle.on { background: #34C759; border-color: #34C759; }
+    .toggle-knob {
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      background: white;
+      border-radius: 50%;
+      top: 1px;
+      left: 1px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .toggle.on .toggle-knob { transform: translateX(20px); }
+    .toggle-wrap {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-spacer { height: 40px; flex-shrink: 0; }
   </style>
 </head>
 <body>
 
 <div class="phone">
+  <div class="notch"></div>
+
+  <div class="screens-wrapper" id="screensWrapper">
+
+  <!-- ════ SETTINGS SCREEN (left) ════ -->
+  <div class="screen screen-settings" id="settingsScreen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="clock">9:41</span>
+      <div class="status-icons">
+        <img src="https://www.figma.com/api/mcp/asset/8f04b7fe-f7b5-4a80-9c54-5a70e5cab32f" alt="signal" />
+        <img src="https://www.figma.com/api/mcp/asset/57be25a5-7bec-487c-a13d-e469e02b6075" alt="wifi" />
+        <img src="https://www.figma.com/api/mcp/asset/eff15892-76ae-4524-b5c3-071aa0583b77" alt="battery" class="battery" />
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="settings-header">
+      <button class="settings-back" aria-label="Back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 1l6 6-6 6" stroke="#263238" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="settings-title">الملف والإعدادات</span>
+      <svg class="settings-gear" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="#263238" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.2.47.32.99.33 1.51V11a2 2 0 110 4h-.09a1.65 1.65 0 00-.24 0z" stroke="#263238" stroke-width="1.5"/></svg>
+    </div>
+    <!-- Profile card -->
+    <div class="profile-card">
+      <span class="profile-icon">
+        <svg width="13" height="16" viewBox="0 0 13 16" fill="none"><circle cx="6.5" cy="4.5" r="3.5" stroke="#263238" stroke-width="1.3"/><path d="M1 14.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5" stroke="#263238" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </span>
+      <div class="profile-info">
+        <span class="profile-name">م. خالد المنصوري</span>
+        <span class="profile-role">مدير عام · الشؤون الاستراتيجية · أبوظبي</span>
+      </div>
+    </div>
+    <!-- Language & Region -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#263238" stroke-width="1.5"/><path d="M3.5 9h17M3.5 15h17" stroke="#263238" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="9" stroke="#263238" stroke-width="1.5"/></svg>
+      <span class="settings-section-title">اللغة والمنطقة</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="settings-badge">عربي</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">لغة الواجهة</span>
+          <span class="settings-row-desc">عربي / English</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-badge">كلاهما</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">التقويم الافتراضي</span>
+          <span class="settings-row-desc">ميلادي / هجري</span>
+        </div>
+      </div>
+    </div>
+    <!-- Accessibility -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2" stroke="#263238" stroke-width="1.5"/><path d="M4 10l8 1m0 0l8-1m-8 1v4m0 0l-3 5m3-5l3 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="settings-section-title">إمكانية الوصول</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="settings-badge">كبير</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">حجم الخط</span>
+          <span class="settings-row-desc">كبير / متوسط / صغير</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تباين الألوان العالي</span>
+          <span class="settings-row-desc">لتحسين قراءة الأولويات</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تقليل الحركة</span>
+          <span class="settings-row-desc">إيقاف الرسوم المتحركة</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">الردود الصوتية</span>
+          <span class="settings-row-desc">نيكسس يقرأ الردود بصوت عال</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">يتبع إعداد الجهاز</span>
+          <span class="settings-row-desc">الوضع الليلي</span>
+        </div>
+      </div>
+    </div>
+    <!-- Notifications -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="settings-section-title">الإشعارات</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">يتبع إعداد إشعارات الصباحية</span>
+          <span class="settings-row-desc">تنبيه يومي الساعة ٦:٠٠ ص</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تنبيهات التصعيد الفوري</span>
+          <span class="settings-row-desc">عند وصول تصعيد باسمك</span>
+        </div>
+      </div>
+    </div>
+    <div class="settings-spacer"></div>
+  </div>
+
+  <!-- ════ HOME SCREEN (right) ════ -->
+  <div class="screen screen-home" id="homeScreen">
 
   <!-- Noise texture SVG background -->
   <svg class="phone-bg" viewBox="0 0 393 852" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -374,8 +713,6 @@
       <rect x="359" y="177" width="3" height="3" rx="1.5" fill="#8B1515"/>
     </g>
   </svg>
-
-  <div class="notch"></div>
 
   <!-- Status bar -->
   <div class="status-bar">
@@ -457,8 +794,14 @@
         </div>
       </div>
       <div class="shortcut-card">
-        <div class="card-icon">
-          <img src="https://www.figma.com/api/mcp/asset/22bb4802-dc97-45cb-904a-51143feee799" alt="" />
+        <div class="card-icon" style="background:none;width:30px;height:30px;padding:0;">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="30" height="30" rx="12" fill="#F7F7F8"/>
+            <path d="M6.58334 14.4998C6.58334 11.5145 6.58334 10.0214 7.51118 9.09434C8.43901 8.1673 9.9313 8.1665 12.9167 8.1665H16.0833C19.0687 8.1665 20.5618 8.1665 21.4888 9.09434C22.4159 10.0222 22.4167 11.5145 22.4167 14.4998V16.0832C22.4167 19.0685 22.4167 20.5616 21.4888 21.4887C20.561 22.4157 19.0687 22.4165 16.0833 22.4165H12.9167C9.9313 22.4165 8.43822 22.4165 7.51118 21.4887C6.58414 20.5608 6.58334 19.0685 6.58334 16.0832V14.4998Z" stroke="#262626" stroke-width="1.5"/>
+            <path d="M15.9999 18.4998C16.133 18.4967 16.2655 18.5204 16.3894 18.5692C16.5133 18.6181 16.6262 18.6913 16.7214 18.7844C16.8167 18.8775 16.8924 18.9887 16.9441 19.1114C16.9958 19.2342 17.0224 19.366 17.0225 19.4993C17.0225 19.6325 16.9959 19.7643 16.9443 19.8871C16.8927 20.0099 16.817 20.1211 16.7218 20.2143C16.6266 20.3074 16.5137 20.3806 16.3898 20.4296C16.2659 20.4785 16.1335 20.5022 16.0004 20.4993C15.7391 20.4935 15.4904 20.3856 15.3077 20.1988C15.1249 20.012 15.0225 19.7611 15.0225 19.4998C15.0224 19.2384 15.1246 18.9874 15.3073 18.8005C15.49 18.6136 15.7386 18.5057 15.9999 18.4998ZM15.9999 13.4998C16.1988 13.4998 16.3895 13.5788 16.5302 13.7194C16.6708 13.8601 16.7499 14.0508 16.7499 14.2498V17.2498C16.7499 17.4487 16.6708 17.6394 16.5302 17.7801C16.3895 17.9207 16.1988 17.9998 15.9999 17.9998C15.8009 17.9998 15.6102 17.9207 15.4695 17.7801C15.3289 17.6394 15.2499 17.4487 15.2499 17.2498V14.2498C15.2499 14.0508 15.3289 13.8601 15.4695 13.7194C15.6102 13.5788 15.8009 13.4998 15.9999 13.4998Z" fill="#C0392B"/>
+            <path d="M6.58334 12.1249H22.4167" stroke="#6B6B6B" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10.5417 8.1665V6.979M18.4584 8.1665V6.979" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
         </div>
         <div class="card-text">
           <span class="card-title">بنود المتأخرة</span>
@@ -474,7 +817,7 @@
       <div class="ask-bar-bg"></div>
       <div class="ask-bar-label">اسأل نيكسس .....</div>
       <!-- Input area -->
-      <div class="ask-bar-input"></div>
+      <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
       <!-- Add file icon (inside input, right side) -->
       <div class="ask-bar-add-icon">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -507,17 +850,31 @@
     <div class="home-bar"></div>
   </div>
 
-</div>
+  </div><!-- /screen-home -->
+  </div><!-- /screens-wrapper -->
+</div><!-- /phone -->
 
 <script>
+  // Clock
   function updateClock() {
     const now = new Date();
     const h = now.getHours().toString().padStart(2, '0');
     const m = now.getMinutes().toString().padStart(2, '0');
-    document.getElementById('clock').textContent = `${h}:${m}`;
+    document.querySelectorAll('.clock').forEach(el => el.textContent = `${h}:${m}`);
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  // Slide navigation
+  const wrapper = document.getElementById('screensWrapper');
+  // Avatar → open settings
+  document.querySelector('.nav-avatar').addEventListener('click', () => {
+    wrapper.classList.add('show-settings');
+  });
+  // Back → close settings (swipe right on settings or click back btn)
+  document.querySelector('.settings-back').addEventListener('click', () => {
+    wrapper.classList.remove('show-settings');
+  });
 </script>
 
 </body>
