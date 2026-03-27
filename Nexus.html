@@ -582,6 +582,208 @@
     }
     .settings-spacer { height: 40px; flex-shrink: 0; }
 
+    /* ── Chat / Conversation screen ── */
+    .screen-chat {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: #F7F7F8;
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .phone.chat-open .screen-chat { transform: translateX(0); }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      padding: 0 16px 8px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-messages::-webkit-scrollbar { display: none; }
+
+    /* AI bubble – white card, rounded all except bottom-left */
+    .chat-ai {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px 16px 16px 0;
+      padding: 14px 16px;
+      width: 330px;
+      align-self: flex-start;
+      direction: rtl;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #263238;
+      line-height: 24px;
+      text-align: right;
+    }
+
+    /* User bubble – dark red, rounded all except bottom-right */
+    .chat-user {
+      background: #8b1515;
+      border: 1px solid #eee;
+      border-radius: 16px 16px 0 16px;
+      padding: 8px 16px;
+      max-width: 286px;
+      align-self: flex-end;
+      direction: rtl;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+      line-height: 16px;
+      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chat-ts {
+      text-align: center;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: black;
+      letter-spacing: 0.35px;
+      align-self: center;
+    }
+
+    /* Profile card inside AI bubble */
+    .chat-profile {
+      width: 293px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      margin-top: 8px;
+      align-self: flex-start;
+    }
+    .cp-name-pill {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      direction: rtl;
+      width: 100%;
+    }
+    .cp-name-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+    .cp-name {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      line-height: 16px;
+    }
+    .cp-role {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+      line-height: 7px;
+    }
+    .cp-details {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      align-items: flex-end;
+      padding-right: 8px;
+      width: 100%;
+    }
+    .cp-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+      width: 100%;
+      direction: rtl;
+    }
+    .cp-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #78777c;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 7px;
+      letter-spacing: 0.35px;
+    }
+    .cp-value {
+      background: white;
+      border-radius: 16px;
+      padding: 4px 8px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+      white-space: nowrap;
+    }
+    .cp-value .late { color: #d5343a; }
+    .cp-note {
+      background: rgba(238,238,238,0.5);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #78777c;
+      text-align: right;
+      line-height: 20px;
+      letter-spacing: 0.35px;
+      width: 100%;
+      direction: rtl;
+    }
+
+    /* Chat chips */
+    .chat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      direction: rtl;
+      align-self: flex-start;
+      width: 100%;
+    }
+    .chat-chip {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+      transition: background 0.15s;
+    }
+    .chat-chip:active { background: #f0f0f0; }
+    .chat-chip.used { opacity: 0.4; pointer-events: none; }
+
+    .chat-hidden { display: none !important; }
+
     /* ── Morning Brief screen ── */
     .screen-morning-brief {
       position: absolute;
@@ -1100,7 +1302,7 @@
       <!-- Bottom action chips -->
       <div class="mb-options">
         <div class="mb-chip"><span class="mb-chip-text">تجاهل الكل</span></div>
-        <div class="mb-chip">
+        <div class="mb-chip" id="openChatChip">
           <span class="mb-chip-text">من المسؤول عن العقد؟</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#263238" stroke-width="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
         </div>
@@ -1143,6 +1345,167 @@
       <div class="home-indicator"><div class="home-bar"></div></div>
     </div><!-- /morning-scroll -->
   </div><!-- /screen-morning-brief -->
+
+  <!-- ════ CHAT / CONVERSATION SCREEN ════ -->
+  <div class="screen-chat" id="chatScreen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="clock">9:41</span>
+      <div class="status-icons">
+        <img src="https://www.figma.com/api/mcp/asset/2f9b8a17-5a2c-421f-82f8-974635b54b1c" alt="signal" />
+        <img src="https://www.figma.com/api/mcp/asset/1f5c93ac-cfc8-40e9-b245-055c1048008a" alt="wifi" />
+        <img src="https://www.figma.com/api/mcp/asset/1f0613ce-dc38-4306-afa8-d36b49429d13" alt="battery" class="battery" />
+      </div>
+    </div>
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <button class="nav-history-btn" id="chatBack" aria-label="Back">
+        <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+          <line x1="0" y1="1"   x2="18" y2="1"   stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="6.5" x2="12" y2="6.5" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="12"  x2="18" y2="12"  stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="nav-title">نيكسس</span>
+      <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/d711d2ee-fa85-4363-bbd1-807401c1dec4" alt="user avatar" />
+    </div>
+
+    <!-- Chat messages area -->
+    <div class="chat-messages" id="chatMessages">
+
+      <!-- AI opening message -->
+      <div class="chat-ai">
+        لقد فتحت ملف مراجعة عقد البنية التحتية. المهمة متأخرة يومان ولا يوجد تحديث منذ ٣ أيام. كيف يمكنني مساعدتك؟
+      </div>
+
+      <!-- Timestamp -->
+      <p class="chat-ts">٦:٢٠ ص</p>
+
+      <!-- Initial action chips -->
+      <div class="chat-chips" id="chips1">
+        <div class="chat-chip" id="chipWho">
+          <span>من المسؤول عن العقد؟</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#263238" stroke-width="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="chat-chip" id="chipEscalate1">
+          <span>صعّد العقد</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 19V5m0 0l-5 5m5-5l5 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="chat-chip" id="chipIgnore1"><span>تجاهل الكل</span></div>
+      </div>
+
+      <!-- User: من المسؤول؟ (shown after chipWho clicked) -->
+      <div class="chat-user chat-hidden" id="userMsg1">من المسؤول؟</div>
+
+      <!-- AI: profile response (shown after chipWho clicked) -->
+      <div class="chat-ai chat-hidden" id="aiMsg2">
+        المسؤول عن هذه المهمة هو أحمد الحوسني، مدير مشاريع البنية التحتية — أُسندت إليه المهمة في ١٤ مارس.
+        <!-- Profile card -->
+        <div class="chat-profile">
+          <!-- Name pill -->
+          <div class="cp-name-pill">
+            <div class="cp-name-text">
+              <span class="cp-name">أحمد الحوسني</span>
+              <span class="cp-role">مدير مشاريع البنية التحتية</span>
+            </div>
+            <svg width="13" height="16" viewBox="0 0 13 16" fill="none"><circle cx="6.5" cy="4.5" r="3.5" stroke="#263238" stroke-width="1.3"/><path d="M1 14.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5" stroke="#263238" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <!-- Details -->
+          <div class="cp-details">
+            <div class="cp-row">
+              <div class="cp-value">وزارة الطاقة والبنية التحتية</div>
+              <div class="cp-label">
+                <span>الجهة</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#78777c" stroke-width="1.5"/><path d="M3 9h18" stroke="#78777c" stroke-width="1.5"/><path d="M9 21V9" stroke="#78777c" stroke-width="1.5"/></svg>
+              </div>
+            </div>
+            <div class="cp-row">
+              <div class="cp-value">١٥ مارس ٢٠٢٦ · <span class="late">متأخر</span></div>
+              <div class="cp-label">
+                <span>الموعد النهائي</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#78777c" stroke-width="1.5"/><path d="M3 10h18M8 2v4M16 2v4" stroke="#78777c" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="cp-row">
+              <div class="cp-value">منذ ٣ أيام</div>
+              <div class="cp-label">
+                <span>آخر نشاط</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#78777c" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#78777c" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+          </div>
+          <!-- Note -->
+          <div class="cp-note">
+            لم يُرفع أي تحديث منذ تاريخ التكليف. العقد بقيمة ٢٤٠ مليون درهم في انتظار مراجعة بنود الأداء.
+          </div>
+        </div>
+      </div>
+
+      <!-- Timestamp 2 -->
+      <p class="chat-ts chat-hidden" id="ts2">٦:٢٠ ص</p>
+
+      <!-- Second chips row (after profile shown) -->
+      <div class="chat-chips chat-hidden" id="chips2">
+        <div class="chat-chip" id="chipEscalate2">
+          <span>صعّد العقد</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 19V5m0 0l-5 5m5-5l5 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="chat-chip" id="chipWho2">
+          <span>من المسؤول عن العقد؟</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#263238" stroke-width="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="chat-chip"><span>تجاهل الكل</span></div>
+      </div>
+
+      <!-- User: صعّد العقد (shown after escalate clicked) -->
+      <div class="chat-user chat-hidden" id="userMsg2">
+        <svg width="14" height="12" viewBox="0 0 16 12" fill="none" style="flex-shrink:0">
+          <rect x="0" y="3" width="2.5" height="6" rx="1.25" fill="white"/>
+          <rect x="4" y="0" width="2.5" height="12" rx="1.25" fill="white"/>
+          <rect x="8" y="3" width="2.5" height="6" rx="1.25" fill="white"/>
+          <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="white"/>
+        </svg>
+        صعّد العقد
+      </div>
+
+      <!-- AI escalation confirmation -->
+      <div class="chat-ai chat-hidden" id="aiMsg3">
+        تم تصعيد العقد إلى الإدارة العليا. سيتم إشعار الجهات المعنية وسيصلك تأكيد خلال ٢٤ ساعة.
+      </div>
+
+    </div><!-- /chat-messages -->
+
+    <!-- Ask Nexus bar -->
+    <div class="ask-bar-wrapper">
+      <div class="ask-bar-container">
+        <div class="ask-bar-bg"></div>
+        <div class="ask-bar-label">اسأل نيكسس .....</div>
+        <input type="text" class="ask-bar-input" id="chatInput" placeholder="اكتب هنا..." />
+        <div class="ask-bar-add-icon" id="chatSendBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="ask-bar-btn ask-bar-mic">
+          <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+            <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
+            <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="7" y1="14.5" x2="7" y2="17" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="ask-bar-btn ask-bar-voice">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+            <rect x="0"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+            <rect x="4"  y="0" width="2.5" height="12" rx="1.25" fill="#262626"/>
+            <rect x="8"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+            <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="#262626"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="home-indicator"><div class="home-bar"></div></div>
+  </div><!-- /screen-chat -->
 
   <!-- ════ HOME SCREEN (foreground card) ════ -->
   <div class="screen-home" id="homeScreen">
@@ -1343,6 +1706,98 @@
   document.getElementById('morningBriefBack').addEventListener('click', () => {
     phone.classList.remove('morning-open');
   });
+
+  // ── Chat screen ──
+  const chatMessages = document.getElementById('chatMessages');
+
+  function scrollChat() {
+    setTimeout(() => { chatMessages.scrollTop = chatMessages.scrollHeight; }, 60);
+  }
+
+  function show(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('chat-hidden');
+  }
+
+  function openChat() {
+    // Reset conversation state
+    ['userMsg1','aiMsg2','ts2','chips2','userMsg2','aiMsg3'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('chat-hidden');
+    });
+    document.getElementById('chips1').classList.remove('chat-hidden');
+    ['chipWho','chipEscalate1','chipIgnore1'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('used');
+    });
+    phone.classList.add('chat-open');
+    scrollChat();
+  }
+
+  // Open chat from morning brief chip
+  document.getElementById('openChatChip').addEventListener('click', openChat);
+
+  // Back button closes chat
+  document.getElementById('chatBack').addEventListener('click', () => {
+    phone.classList.remove('chat-open');
+  });
+
+  // "من المسؤول عن العقد؟" → show user bubble + AI profile response
+  function handleWho() {
+    document.getElementById('chips1').querySelectorAll('.chat-chip').forEach(c => c.classList.add('used'));
+    show('userMsg1');
+    scrollChat();
+    setTimeout(() => {
+      show('aiMsg2');
+      scrollChat();
+      setTimeout(() => {
+        show('ts2');
+        show('chips2');
+        scrollChat();
+      }, 400);
+    }, 500);
+  }
+  document.getElementById('chipWho').addEventListener('click', handleWho);
+  document.getElementById('chipWho2') && document.getElementById('chipWho2').addEventListener('click', handleWho);
+
+  // "صعّد العقد" → show user escalate bubble + AI confirmation
+  function handleEscalate() {
+    // Mark all current chips as used
+    document.querySelectorAll('#chips1 .chat-chip, #chips2 .chat-chip').forEach(c => c.classList.add('used'));
+    show('userMsg2');
+    scrollChat();
+    setTimeout(() => {
+      show('aiMsg3');
+      scrollChat();
+    }, 600);
+  }
+  document.getElementById('chipEscalate1').addEventListener('click', handleEscalate);
+  document.getElementById('chipEscalate2') && document.getElementById('chipEscalate2').addEventListener('click', handleEscalate);
+
+  // Send typed message
+  document.getElementById('chatSendBtn').addEventListener('click', sendTyped);
+  document.getElementById('chatInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendTyped();
+  });
+
+  function sendTyped() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-user';
+    bubble.textContent = text;
+    chatMessages.appendChild(bubble);
+    scrollChat();
+    setTimeout(() => {
+      const reply = document.createElement('div');
+      reply.className = 'chat-ai';
+      reply.textContent = 'جاري معالجة طلبك...';
+      chatMessages.appendChild(reply);
+      scrollChat();
+    }, 700);
+  }
 </script>
 
 </body>
