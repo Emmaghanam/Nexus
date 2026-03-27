@@ -1840,15 +1840,15 @@
 
   // Reveal-drawer navigation
   const phone = document.querySelector('.phone');
-  // Avatar → open settings
-  document.querySelector('.nav-avatar').addEventListener('click', () => {
-    phone.classList.add('settings-open');
+  // All avatars → open settings
+  document.querySelectorAll('.nav-avatar').forEach(el => {
+    el.addEventListener('click', () => phone.classList.add('settings-open'));
   });
   // Back button → close settings
   document.querySelector('.settings-back').addEventListener('click', () => {
     phone.classList.remove('settings-open');
   });
-  // Click on visible home card → close settings
+  // Click on home card overlay → close settings
   document.getElementById('homeOverlay').addEventListener('click', () => {
     phone.classList.remove('settings-open');
   });
