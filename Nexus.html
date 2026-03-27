@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexus App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+    }
+
+    /* ── Phone shell ── */
+    .phone {
+      width: 393px;
+      height: 852px;
+      background: #F7F7F8;
+      border-radius: 50px;
+      box-shadow:
+        0 0 0 12px #111,
+        0 0 0 14px #333,
+        0 40px 80px rgba(0,0,0,0.6);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Noise SVG sits behind everything */
+    .phone-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 393px;
+      height: 852px;
+      pointer-events: none;
+      z-index: 0;
+      display: block;
+    }
+
+    /* Notch */
+    .notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 126px;
+      height: 34px;
+      background: #111;
+      border-radius: 0 0 20px 20px;
+      z-index: 10;
+    }
+
+    /* Lift content above bg */
+    .screen-home > *:not(.phone-bg) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      height: 59px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 24px 14px;
+      direction: ltr;
+      flex-shrink: 0;
+    }
+    .status-bar .clock {
+      font-size: 17px;
+      font-weight: 600;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+    }
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .status-icons img {
+      height: 12px;
+      width: auto;
+      display: block;
+    }
+    .status-icons .battery { height: 13px; }
+
+    /* ── Nav bar ── */
+    .nav-bar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 110px;
+      padding: 0 20px;
+      flex-shrink: 0;
+      direction: ltr;
+    }
+    .nav-history-btn {
+      width: 38px;
+      height: 38px;
+      background: white;
+      border-radius: 19px;
+      box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .nav-title {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: #262626;
+      white-space: nowrap;
+    }
+    .nav-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 9999px;
+      box-shadow: 0 0 0 2px white, 1px 1px 5px 0px rgba(0,0,0,0.32);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    /* ── Logo area ── */
+    .logo-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 110px 0 16px;
+      flex-shrink: 0;
+    }
+    .logo-area svg {
+      width: 108px;
+      height: 132px;
+    }
+
+    /* ── Greeting ── */
+    .greeting-area {
+      height: 155px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 80px;
+      flex-shrink: 0;
+      direction: rtl;
+    }
+    .greeting-title {
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #262626;
+      line-height: 42px;
+      text-align: right;
+    }
+    .greeting-body {
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #6b6b6b;
+      text-align: center;
+      width: 275px;
+      line-height: 23.9px;
+    }
+
+    /* ── Shortcut cards ── */
+    .main-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      padding-bottom: 48px;
+      flex-shrink: 0;
+    }
+    .btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      direction: rtl;
+    }
+    .btn-row-top, .btn-row-bottom { gap: 18px; width: 330px; }
+
+    .shortcut-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.05);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      cursor: pointer;
+      direction: rtl;
+      transition: transform 0.12s;
+    }
+    .shortcut-card:active { transform: scale(0.97); }
+    .shortcut-card { width: 156px; }
+
+    .card-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+    .card-title {
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+      white-space: nowrap;
+      line-height: normal;
+      text-align: right;
+    }
+    .card-subtitle {
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b6b6b;
+      white-space: nowrap;
+      line-height: 20px;
+      text-align: right;
+    }
+    .card-icon {
+      width: 30px;
+      height: 30px;
+      background: #F7F7F8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon img {
+      width: 21px;
+      height: 21px;
+      object-fit: contain;
+    }
+
+    /* ── Ask Nexus bar ── */
+    .ask-bar-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 12px 10px 14px;
+      flex-shrink: 0;
+    }
+    .ask-bar-container {
+      width: 357px;
+      height: 82px;
+      position: relative;
+      border-radius: 20px;
+      box-shadow: 0px 3px 16px 10px rgba(0,0,0,0.05);
+    }
+    /* Frosted outer bg */
+    .ask-bar-bg {
+      position: absolute;
+      inset: 0;
+      background: #F7F7F8;
+      border-radius: 20px;
+      box-shadow: inset 0px 1px 1px 2px white;
+    }
+    /* Top label */
+    .ask-bar-label {
+      position: absolute;
+      top: 8px;
+      right: 18px;
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #262626;
+      line-height: 20px;
+      direction: rtl;
+    }
+    /* Input field area (lower right) */
+    .ask-bar-input {
+      position: absolute;
+      bottom: 10px;
+      left: 88px;
+      right: 11px;
+      height: 36px;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      padding: 0 36px 0 8px;
+      direction: rtl;
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      font-size: 12px;
+      color: #262626;
+      outline: none;
+    }
+    .ask-bar-input::placeholder {
+      color: #6b6b6b;
+    }
+    /* Add (+) icon inside input */
+    .ask-bar-add-icon {
+      position: absolute;
+      bottom: 10px;
+      right: 11px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    /* Mic button */
+    .ask-bar-btn {
+      position: absolute;
+      bottom: 10px;
+      width: 36px;
+      height: 36px;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .ask-bar-mic   { left: 8px; }
+    .ask-bar-voice { left: 48px; }
+
+    /* ── Home indicator ── */
+    .home-indicator {
+      height: 34px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .home-bar {
+      width: 134px;
+      height: 5px;
+      background: #111;
+      border-radius: 3px;
+      opacity: 0.2;
+    }
+
+    /* ── Reveal-drawer system ── */
+    .screen-settings {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: #F7F7F8;
+      z-index: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      padding-top: 59px;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen-settings::-webkit-scrollbar { display: none; }
+    .screen-settings > * { padding-left: 100px; }
+
+    .screen-home {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      background: #F7F7F8;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                  border-radius 0.4s, box-shadow 0.4s;
+      will-change: transform;
+      overflow: hidden;
+    }
+    .phone.settings-open .screen-home {
+      transform: translateX(-304px);
+      border-radius: 9.6px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0px 3px 15px 3px rgba(0,0,0,0.04);
+      pointer-events: none;
+    }
+    /* Clickable overlay on home when settings open */
+    .home-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      z-index: 3;
+      cursor: pointer;
+    }
+    .phone.settings-open .home-overlay { display: block; }
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 24px 0 0;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .settings-back {
+      width: 32px; height: 32px;
+      background: white;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 110px;
+      top: 67px;
+      z-index: 4;
+    }
+    .settings-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+      direction: rtl;
+    }
+    .settings-gear {
+      width: 24px; height: 24px;
+      opacity: 0.5;
+    }
+    /* Profile card */
+    .profile-card {
+      margin: 12px 24px 12px 0;
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+      gap: 4px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .profile-icon {
+      font-size: 16px;
+      color: #263238;
+      line-height: 1;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .profile-name {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      text-align: right;
+    }
+    .profile-role {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: right;
+      letter-spacing: 0.35px;
+    }
+    /* Section */
+    .settings-divider {
+      height: 2px;
+      margin: 12px 24px;
+      background: linear-gradient(to left, #e2e8f0, transparent);
+      flex-shrink: 0;
+    }
+    .settings-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 4px 24px 8px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .settings-section-icon { width: 24px; height: 24px; }
+    .settings-section-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+    }
+    /* Settings rows */
+    .settings-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+      padding: 0 24px;
+      flex-shrink: 0;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      direction: rtl;
+    }
+    .settings-row-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+      width: 160px;
+      text-align: right;
+    }
+    .settings-row-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      line-height: 20px;
+    }
+    .settings-row-desc {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+      line-height: normal;
+    }
+    .settings-badge {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 49px;
+    }
+    /* Toggle */
+    .toggle {
+      width: 51px;
+      height: 31px;
+      border-radius: 15.5px;
+      background: #e9e9ea;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid #eee;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .toggle.on { background: #34C759; border-color: #34C759; }
+    .toggle-knob {
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      background: white;
+      border-radius: 50%;
+      top: 1px;
+      left: 1px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    .toggle.on .toggle-knob { transform: translateX(20px); }
+    .toggle-wrap {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .settings-spacer { height: 40px; flex-shrink: 0; }
+
+    /* ── Morning Brief screen ── */
+    .screen-morning-brief {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: #F7F7F8;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .phone.morning-open .screen-morning-brief {
+      transform: translateX(0);
+    }
+    .morning-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 8px;
+    }
+    .morning-scroll::-webkit-scrollbar { display: none; }
+
+    /* Morning brief main card */
+    .mb-card {
+      margin: 0 16px 0 24px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mb-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 0 16px;
+      height: 50px;
+      border-bottom: 1px solid #eee;
+      direction: rtl;
+    }
+    .mb-card-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+    }
+    .mb-card-date {
+      flex: 1;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: left;
+    }
+    .mb-icon {
+      width: 32px; height: 32px;
+      background: #F7F7F8;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .mb-icon img { width: 21px; height: 21px; object-fit: contain; }
+
+    /* Counter row */
+    .mb-counter {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 8px 16px;
+      direction: rtl;
+    }
+    .mb-counter-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #263238;
+    }
+    .mb-counter-badge {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 0 8px;
+      height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+    }
+
+    /* Priority group */
+    .mb-priority-group {
+      margin: 0 16px 8px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mb-priority-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      height: 32px;
+      padding: 0 13px;
+      direction: rtl;
+    }
+    .mb-priority-header.critical { background: #fdecea; }
+    .mb-priority-header.high     { background: #feebc8; }
+    .mb-priority-header.medium   { background: #f8f8e5; }
+    .mb-priority-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mb-priority-label.critical { color: #8b1515; }
+    .mb-priority-label.high     { color: #b7791f; }
+    .mb-priority-label.medium   { color: #d28a23; }
+    .mb-priority-count {
+      background: white;
+      border-radius: 60px;
+      width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mb-priority-count.critical { color: #8b1515; }
+    .mb-priority-count.high     { color: #b7791f; }
+    .mb-priority-count.medium   { color: #d28a23; }
+
+    /* Task card row */
+    .mb-task-card {
+      background: white;
+      border: 1px solid #eee;
+      height: 70px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 20px;
+      direction: rtl;
+      gap: 8px;
+    }
+    .mb-task-card:not(:last-child) { border-bottom: 1px solid #eee; border-top: none; }
+    .mb-task-card:last-child { border-radius: 0 0 8px 8px; }
+
+    /* Left urgency bar (visual left edge) */
+    .mb-task-bar {
+      position: absolute;
+      left: 0; top: 18px; bottom: 20px;
+      width: 3px;
+      border-radius: 3px;
+    }
+    .mb-task-bar.critical { background: #8b1515; }
+    .mb-task-bar.high     { background: #b7791f; }
+    .mb-task-bar.medium   { background: #8b1515; }
+
+    .mb-task-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+    .mb-task-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+      text-align: right;
+      width: 100%;
+    }
+    .mb-task-sub {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: right;
+      width: 100%;
+    }
+
+    /* Time badge */
+    .mb-time-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .mb-time-badge.critical { background: #fdecea; color: #8b1515; }
+    .mb-time-badge.high     { background: #feebc8; color: #b7791f; }
+    .mb-time-badge.elevated { background: #ebf2fa; color: #2b6cb0; }
+
+    /* Progress row */
+    .mb-progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .mb-progress-circles {
+      display: flex;
+      gap: 4px;
+    }
+    .mb-progress-circle {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1px solid #a0a0a0;
+      background: #F7F7F8;
+    }
+    .mb-progress-text {
+      flex: 1;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b6b6b;
+      text-align: right;
+    }
+
+    /* Timestamp */
+    .mb-timestamp {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: black;
+      text-align: center;
+      letter-spacing: 0.35px;
+      padding: 2px 0 8px;
+      flex-shrink: 0;
+    }
+
+    /* Bottom chips */
+    .mb-options {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      padding: 6px 20px;
+      flex-shrink: 0;
+      direction: rtl;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .mb-options::-webkit-scrollbar { display: none; }
+    .mb-chip {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .mb-chip-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- Clickable overlay to close settings -->
+  <div class="home-overlay" id="homeOverlay"></div>
+
+  <!-- ════ SETTINGS SCREEN (background layer) ════ -->
+  <div class="screen-settings" id="settingsScreen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="clock">9:41</span>
+      <div class="status-icons">
+        <img src="https://www.figma.com/api/mcp/asset/8f04b7fe-f7b5-4a80-9c54-5a70e5cab32f" alt="signal" />
+        <img src="https://www.figma.com/api/mcp/asset/57be25a5-7bec-487c-a13d-e469e02b6075" alt="wifi" />
+        <img src="https://www.figma.com/api/mcp/asset/eff15892-76ae-4524-b5c3-071aa0583b77" alt="battery" class="battery" />
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="settings-header">
+      <button class="settings-back" aria-label="Back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 1l6 6-6 6" stroke="#263238" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="settings-title">الملف والإعدادات</span>
+      <svg class="settings-gear" viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="#263238" stroke-width="1.5"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.2.47.32.99.33 1.51V11a2 2 0 110 4h-.09a1.65 1.65 0 00-.24 0z" stroke="#263238" stroke-width="1.5"/></svg>
+    </div>
+    <!-- Profile card -->
+    <div class="profile-card">
+      <span class="profile-icon">
+        <svg width="13" height="16" viewBox="0 0 13 16" fill="none"><circle cx="6.5" cy="4.5" r="3.5" stroke="#263238" stroke-width="1.3"/><path d="M1 14.5c0-3.04 2.46-5.5 5.5-5.5s5.5 2.46 5.5 5.5" stroke="#263238" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </span>
+      <div class="profile-info">
+        <span class="profile-name">م. خالد المنصوري</span>
+        <span class="profile-role">مدير عام · الشؤون الاستراتيجية · أبوظبي</span>
+      </div>
+    </div>
+    <!-- Language & Region -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#263238" stroke-width="1.5"/><path d="M3.5 9h17M3.5 15h17" stroke="#263238" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="4" ry="9" stroke="#263238" stroke-width="1.5"/></svg>
+      <span class="settings-section-title">اللغة والمنطقة</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="settings-badge">عربي</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">لغة الواجهة</span>
+          <span class="settings-row-desc">عربي / English</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-badge">كلاهما</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">التقويم الافتراضي</span>
+          <span class="settings-row-desc">ميلادي / هجري</span>
+        </div>
+      </div>
+    </div>
+    <!-- Accessibility -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="5" r="2" stroke="#263238" stroke-width="1.5"/><path d="M4 10l8 1m0 0l8-1m-8 1v4m0 0l-3 5m3-5l3 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="settings-section-title">إمكانية الوصول</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="settings-badge">كبير</div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">حجم الخط</span>
+          <span class="settings-row-desc">كبير / متوسط / صغير</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تباين الألوان العالي</span>
+          <span class="settings-row-desc">لتحسين قراءة الأولويات</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تقليل الحركة</span>
+          <span class="settings-row-desc">إيقاف الرسوم المتحركة</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">الردود الصوتية</span>
+          <span class="settings-row-desc">نيكسس يقرأ الردود بصوت عال</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">يتبع إعداد الجهاز</span>
+          <span class="settings-row-desc">الوضع الليلي</span>
+        </div>
+      </div>
+    </div>
+    <!-- Notifications -->
+    <div class="settings-divider"></div>
+    <div class="settings-section-header">
+      <svg class="settings-section-icon" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 106 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 01-3.46 0" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="settings-section-title">الإشعارات</span>
+    </div>
+    <div class="settings-rows">
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle on" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">يتبع إعداد إشعارات الصباحية</span>
+          <span class="settings-row-desc">تنبيه يومي الساعة ٦:٠٠ ص</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="toggle-wrap"><div class="toggle" onclick="this.classList.toggle('on')"><div class="toggle-knob"></div></div></div>
+        <div class="settings-row-text">
+          <span class="settings-row-label">تنبيهات التصعيد الفوري</span>
+          <span class="settings-row-desc">عند وصول تصعيد باسمك</span>
+        </div>
+      </div>
+    </div>
+    <div class="settings-spacer"></div>
+  </div>
+
+  <!-- ════ MORNING BRIEF SCREEN ════ -->
+  <div class="screen-morning-brief" id="morningBriefScreen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="clock">9:41</span>
+      <div class="status-icons">
+        <img src="https://www.figma.com/api/mcp/asset/8f04b7fe-f7b5-4a80-9c54-5a70e5cab32f" alt="signal" />
+        <img src="https://www.figma.com/api/mcp/asset/57be25a5-7bec-487c-a13d-e469e02b6075" alt="wifi" />
+        <img src="https://www.figma.com/api/mcp/asset/eff15892-76ae-4524-b5c3-071aa0583b77" alt="battery" class="battery" />
+      </div>
+    </div>
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <button class="nav-history-btn" id="morningBriefBack" aria-label="Back">
+        <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+          <line x1="0" y1="1"   x2="18" y2="1"   stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="6.5" x2="12" y2="6.5" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="12"  x2="18" y2="12"  stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="nav-title">نيكسس</span>
+      <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/667f568e-060f-487e-86a3-acea63ca6b1d" alt="user avatar" />
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="morning-scroll">
+      <!-- Main card -->
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <div class="mb-icon">
+            <img src="https://www.figma.com/api/mcp/asset/3def21c3-f69e-4485-ac37-a18463484676" alt="" />
+          </div>
+          <span class="mb-card-title">ملخص الصباح</span>
+          <span class="mb-card-date">١٨ مارس ٢٠٢٦</span>
+        </div>
+
+        <!-- Counter -->
+        <div class="mb-counter">
+          <span class="mb-counter-text">بنود تستدعي اهتمامك اليوم</span>
+          <div class="mb-counter-badge">٤</div>
+        </div>
+
+        <!-- Critical group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header critical">
+            <span class="mb-priority-label critical">بالغة الأهمية</span>
+            <div class="mb-priority-count critical">٢</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar critical"></div>
+            <div class="mb-time-badge critical">متأخر يومان ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">مراجعة عقد البنية التحتية</span>
+              <span class="mb-task-sub">عقد ٢٤٠م درهم · دفعة ثالثة معلّقة</span>
+            </div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar critical"></div>
+            <div class="mb-time-badge critical">متأخر يومان ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">قرارات مجلس الإدارة · فبراير</span>
+              <span class="mb-task-sub">٨ قرارات · في انتظار الأقسام</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- High group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header high">
+            <span class="mb-priority-label high">أهمية عالية</span>
+            <div class="mb-priority-count high">١</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar high"></div>
+            <div class="mb-time-badge high">اليوم ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">خارطة البنية الرقمية · م٢</span>
+              <span class="mb-task-sub">مكتمل ٦٠٪ · مراجعة مطلوبة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medium group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header medium">
+            <span class="mb-priority-label medium">أهمية مرتفعة</span>
+            <div class="mb-priority-count medium">١</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar medium"></div>
+            <div class="mb-time-badge elevated">الجمعة ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">تقرير الأداء الحكومي · ر١</span>
+              <span class="mb-task-sub">مكتمل ٧٠٪ · للديوان الأميري</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="mb-progress">
+          <div class="mb-progress-circles">
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+          </div>
+          <span class="mb-progress-text">تقدم الملخص صفر من ٤ بنود</span>
+        </div>
+        <div class="mb-timestamp">٦:٢٠ ص</div>
+      </div><!-- /mb-card -->
+
+      <!-- Bottom action chips -->
+      <div class="mb-options">
+        <div class="mb-chip"><span class="mb-chip-text">تجاهل الكل</span></div>
+        <div class="mb-chip">
+          <span class="mb-chip-text">من المسؤول عن العقد؟</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#263238" stroke-width="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="mb-chip">
+          <span class="mb-chip-text">صعّد العقد</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 19V5m0 0l-5 5m5-5l5 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Ask Nexus bar -->
+      <div class="ask-bar-wrapper">
+        <div class="ask-bar-container">
+          <div class="ask-bar-bg"></div>
+          <div class="ask-bar-label">اسأل نيكسس .....</div>
+          <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
+          <div class="ask-bar-add-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ask-bar-btn ask-bar-mic">
+            <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+              <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
+              <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+              <line x1="7" y1="14.5" x2="7" y2="17" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ask-bar-btn ask-bar-voice">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <rect x="0"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+              <rect x="4"  y="0" width="2.5" height="12" rx="1.25" fill="#262626"/>
+              <rect x="8"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+              <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="#262626"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Home indicator -->
+      <div class="home-indicator"><div class="home-bar"></div></div>
+    </div><!-- /morning-scroll -->
+  </div><!-- /screen-morning-brief -->
+
+  <!-- ════ HOME SCREEN (foreground card) ════ -->
+  <div class="screen-home" id="homeScreen">
+
+  <!-- Noise texture SVG background -->
+  <svg class="phone-bg" viewBox="0 0 393 852" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="bg-noise" x="0" y="0" width="393" height="852" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+        <feTurbulence type="fractalNoise" baseFrequency="10 10" stitchTiles="stitch" numOctaves="3" result="noise" seed="9045"/>
+        <feColorMatrix in="noise" type="luminanceToAlpha" result="alphaNoise"/>
+        <feComponentTransfer in="alphaNoise" result="coloredNoise1">
+          <feFuncA type="discrete" tableValues="1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 "/>
+        </feComponentTransfer>
+        <feComposite operator="in" in2="shape" in="coloredNoise1" result="noise1Clipped"/>
+        <feFlood flood-color="rgba(0,0,0,0.12)" result="color1Flood"/>
+        <feComposite operator="in" in2="noise1Clipped" in="color1Flood" result="color1"/>
+        <feMerge><feMergeNode in="shape"/><feMergeNode in="color1"/></feMerge>
+      </filter>
+    </defs>
+    <g filter="url(#bg-noise)">
+      <rect width="393" height="852" rx="20" fill="#F7F7F8"/>
+      <rect x="359" y="415" width="3" height="3" rx="1.5" fill="#C05621"/>
+      <rect x="359" y="177" width="3" height="3" rx="1.5" fill="#8B1515"/>
+    </g>
+  </svg>
+
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="clock" id="clock">9:41</span>
+    <div class="status-icons">
+      <img src="https://www.figma.com/api/mcp/asset/13b86271-2a6c-4f86-b837-e63b4a60a265" alt="signal" />
+      <img src="https://www.figma.com/api/mcp/asset/bcc6e612-0f2b-41b1-8308-75a6dc6ecf16" alt="wifi" />
+      <img src="https://www.figma.com/api/mcp/asset/798f5640-3d8b-45d2-bc7e-976cb823072e" alt="battery" class="battery" />
+    </div>
+  </div>
+
+  <!-- Navigation bar -->
+  <div class="nav-bar">
+    <button class="nav-history-btn" aria-label="Menu">
+      <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+        <line x1="0" y1="1"   x2="18" y2="1"   stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="0" y1="6.5" x2="12" y2="6.5" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="0" y1="12"  x2="18" y2="12"  stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <span class="nav-title">نيكسس</span>
+    <img class="nav-avatar"
+      src="https://www.figma.com/api/mcp/asset/9438a834-50e5-4cc9-80d0-366d4fe6ded9"
+      alt="user avatar" />
+  </div>
+
+  <!-- Nexus logo -->
+  <div class="logo-area">
+    <svg width="108" height="132" viewBox="0 0 108 132" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18.1184 76.6514C8.03948 72.6219 3 70.6071 3 68.1C3 65.593 8.03948 63.5833 18.1184 59.5487L32.369 53.8494C42.448 49.8148 47.4925 47.8 53.75 47.8C60.0075 47.8 65.052 49.8148 75.131 53.8494L89.3816 59.5487C99.4605 63.5782 104.5 65.593 104.5 68.1C104.5 70.6071 99.4605 72.6168 89.3816 76.6514L75.131 82.3557C65.052 86.3853 60.0075 88.4 53.75 88.4C47.4925 88.4 42.448 86.3853 32.369 82.3557L18.1184 76.6514Z" stroke="#EBEBEB" stroke-width="6"/>
+      <path opacity="0.5" d="M22.1124 78.25L18.1184 79.8486C8.03948 83.8782 3 85.898 3 88.4C3 90.902 8.03948 92.9168 18.1184 96.9514L32.369 102.656C42.448 106.685 47.4925 108.7 53.75 108.7C60.0075 108.7 65.052 106.685 75.131 102.656L89.3816 96.9514C99.4605 92.9218 104.5 90.902 104.5 88.4C104.5 85.898 99.4605 83.8832 89.3816 79.8486L85.3875 78.25M22.1124 98.55L18.1184 100.149C8.03948 104.178 3 106.198 3 108.7C3 111.202 8.03948 113.217 18.1184 117.251L32.369 122.956C42.448 126.985 47.4925 129 53.75 129C60.0075 129 65.052 126.985 75.131 122.951L89.3816 117.251C99.4605 113.222 104.5 111.207 104.5 108.7C104.5 106.198 99.4605 104.183 89.3816 100.149L85.3875 98.55" stroke="#EBEBEB" stroke-width="6"/>
+      <mask id="path-3-outside-1_412_720" maskUnits="userSpaceOnUse" x="20" y="6" width="65" height="66" fill="black">
+        <rect fill="white" x="20" y="6" width="65" height="66"/>
+        <path d="M56.8197 9.21094C57.2208 9.21094 57.5671 9.34766 57.8588 9.62109C58.1505 9.8763 58.3236 10.2135 58.3783 10.6328C58.8341 14.0964 59.3354 17.0221 59.8822 19.4102C60.4473 21.7799 61.1856 23.7396 62.0971 25.2891C63.0268 26.8203 64.2481 28.0508 65.7611 28.9805C67.2742 29.8919 69.1973 30.612 71.5307 31.1406C73.8822 31.6693 76.7716 32.125 80.1986 32.5078C80.6361 32.5443 80.9916 32.7083 81.2651 33C81.5385 33.2917 81.6752 33.638 81.6752 34.0391C81.6752 34.4583 81.5385 34.8138 81.2651 35.1055C80.9916 35.3971 80.6361 35.5703 80.1986 35.625C76.7716 35.9896 73.8822 36.4362 71.5307 36.9648C69.1973 37.4935 67.2742 38.2227 65.7611 39.1523C64.2481 40.0638 63.0268 41.2943 62.0971 42.8438C61.1856 44.375 60.4473 46.3346 59.8822 48.7227C59.3354 51.0924 58.8341 54 58.3783 57.4453C58.3236 57.8828 58.1505 58.2292 57.8588 58.4844C57.5671 58.7578 57.2208 58.8945 56.8197 58.8945C56.4187 58.8945 56.0723 58.7578 55.7807 58.4844C55.5072 58.2292 55.3432 57.8828 55.2885 57.4453C54.8328 54 54.3223 51.0924 53.7572 48.7227C53.2104 46.3346 52.4721 44.375 51.5424 42.8438C50.6309 41.2943 49.4187 40.0638 47.9057 39.1523C46.3927 38.2227 44.4604 37.4935 42.1088 36.9648C39.7755 36.4362 36.8953 35.9896 33.4682 35.625C33.0307 35.5703 32.6661 35.3971 32.3744 35.1055C32.101 34.8138 31.9643 34.4583 31.9643 34.0391C31.9643 33.638 32.101 33.2917 32.3744 33C32.6661 32.7083 33.0307 32.5443 33.4682 32.5078C36.877 32.0521 39.7481 31.5508 42.0815 31.0039C44.4148 30.4388 46.3289 29.7005 47.8236 28.7891C49.3367 27.8776 50.5489 26.6654 51.4604 25.1523C52.3901 23.6393 53.1374 21.707 53.7026 19.3555C54.2859 17.0039 54.8145 14.0964 55.2885 10.6328C55.3432 10.2135 55.5072 9.8763 55.7807 9.62109C56.0723 9.34766 56.4187 9.21094 56.8197 9.21094ZM35.4369 44.1562C35.7286 44.1562 35.9656 44.2474 36.1479 44.4297C36.3484 44.5938 36.4669 44.8216 36.5033 45.1133C36.7768 47.2279 37.0593 48.8776 37.351 50.0625C37.6427 51.2292 38.0984 52.1133 38.7182 52.7148C39.338 53.3164 40.2677 53.7812 41.5072 54.1094C42.7468 54.4375 44.4513 54.8112 46.6205 55.2305C46.894 55.2669 47.1218 55.3763 47.3041 55.5586C47.4864 55.7409 47.5776 55.987 47.5776 56.2969C47.5776 56.5885 47.4864 56.8255 47.3041 57.0078C47.1218 57.1901 46.894 57.2995 46.6205 57.3359C44.4513 57.6458 42.7468 57.9466 41.5072 58.2383C40.2677 58.5482 39.338 59.013 38.7182 59.6328C38.0984 60.2526 37.6427 61.1641 37.351 62.3672C37.0593 63.5885 36.7768 65.2656 36.5033 67.3984C36.4304 68.0729 36.0749 68.4102 35.4369 68.4102C35.127 68.4102 34.8718 68.319 34.6713 68.1367C34.489 67.9544 34.3888 67.6992 34.3705 67.3711C34.1518 65.694 33.933 64.3177 33.7143 63.2422C33.5138 62.1667 33.2221 61.3099 32.8393 60.6719C32.4565 60.0339 31.9187 59.5326 31.226 59.168C30.5515 58.8034 29.6492 58.4844 28.519 58.2109C27.3888 57.9557 25.9578 57.6641 24.226 57.3359C23.588 57.2266 23.269 56.8802 23.269 56.2969C23.269 55.6771 23.6335 55.3216 24.3627 55.2305C26.0763 54.9388 27.489 54.6745 28.601 54.4375C29.713 54.2005 30.6062 53.8997 31.2807 53.5352C31.9552 53.1523 32.4747 52.6328 32.8393 51.9766C33.2221 51.3021 33.5138 50.4271 33.7143 49.3516C33.933 48.2578 34.1518 46.8633 34.3705 45.168C34.3888 44.8581 34.489 44.612 34.6713 44.4297C34.8718 44.2474 35.127 44.1562 35.4369 44.1562Z"/>
+      </mask>
+      <path d="M56.8197 9.21094C57.2208 9.21094 57.5671 9.34766 57.8588 9.62109C58.1505 9.8763 58.3236 10.2135 58.3783 10.6328C58.8341 14.0964 59.3354 17.0221 59.8822 19.4102C60.4473 21.7799 61.1856 23.7396 62.0971 25.2891C63.0268 26.8203 64.2481 28.0508 65.7611 28.9805C67.2742 29.8919 69.1973 30.612 71.5307 31.1406C73.8822 31.6693 76.7716 32.125 80.1986 32.5078C80.6361 32.5443 80.9916 32.7083 81.2651 33C81.5385 33.2917 81.6752 33.638 81.6752 34.0391C81.6752 34.4583 81.5385 34.8138 81.2651 35.1055C80.9916 35.3971 80.6361 35.5703 80.1986 35.625C76.7716 35.9896 73.8822 36.4362 71.5307 36.9648C69.1973 37.4935 67.2742 38.2227 65.7611 39.1523C64.2481 40.0638 63.0268 41.2943 62.0971 42.8438C61.1856 44.375 60.4473 46.3346 59.8822 48.7227C59.3354 51.0924 58.8341 54 58.3783 57.4453C58.3236 57.8828 58.1505 58.2292 57.8588 58.4844C57.5671 58.7578 57.2208 58.8945 56.8197 58.8945C56.4187 58.8945 56.0723 58.7578 55.7807 58.4844C55.5072 58.2292 55.3432 57.8828 55.2885 57.4453C54.8328 54 54.3223 51.0924 53.7572 48.7227C53.2104 46.3346 52.4721 44.375 51.5424 42.8438C50.6309 41.2943 49.4187 40.0638 47.9057 39.1523C46.3927 38.2227 44.4604 37.4935 42.1088 36.9648C39.7755 36.4362 36.8953 35.9896 33.4682 35.625C33.0307 35.5703 32.6661 35.3971 32.3744 35.1055C32.101 34.8138 31.9643 34.4583 31.9643 34.0391C31.9643 33.638 32.101 33.2917 32.3744 33C32.6661 32.7083 33.0307 32.5443 33.4682 32.5078C36.877 32.0521 39.7481 31.5508 42.0815 31.0039C44.4148 30.4388 46.3289 29.7005 47.8236 28.7891C49.3367 27.8776 50.5489 26.6654 51.4604 25.1523C52.3901 23.6393 53.1374 21.707 53.7026 19.3555C54.2859 17.0039 54.8145 14.0964 55.2885 10.6328C55.3432 10.2135 55.5072 9.8763 55.7807 9.62109C56.0723 9.34766 56.4187 9.21094 56.8197 9.21094ZM35.4369 44.1562C35.7286 44.1562 35.9656 44.2474 36.1479 44.4297C36.3484 44.5938 36.4669 44.8216 36.5033 45.1133C36.7768 47.2279 37.0593 48.8776 37.351 50.0625C37.6427 51.2292 38.0984 52.1133 38.7182 52.7148C39.338 53.3164 40.2677 53.7812 41.5072 54.1094C42.7468 54.4375 44.4513 54.8112 46.6205 55.2305C46.894 55.2669 47.1218 55.3763 47.3041 55.5586C47.4864 55.7409 47.5776 55.987 47.5776 56.2969C47.5776 56.5885 47.4864 56.8255 47.3041 57.0078C47.1218 57.1901 46.894 57.2995 46.6205 57.3359C44.4513 57.6458 42.7468 57.9466 41.5072 58.2383C40.2677 58.5482 39.338 59.013 38.7182 59.6328C38.0984 60.2526 37.6427 61.1641 37.351 62.3672C37.0593 63.5885 36.7768 65.2656 36.5033 67.3984C36.4304 68.0729 36.0749 68.4102 35.4369 68.4102C35.127 68.4102 34.8718 68.319 34.6713 68.1367C34.489 67.9544 34.3888 67.6992 34.3705 67.3711C34.1518 65.694 33.933 64.3177 33.7143 63.2422C33.5138 62.1667 33.2221 61.3099 32.8393 60.6719C32.4565 60.0339 31.9187 59.5326 31.226 59.168C30.5515 58.8034 29.6492 58.4844 28.519 58.2109C27.3888 57.9557 25.9578 57.6641 24.226 57.3359C23.588 57.2266 23.269 56.8802 23.269 56.2969C23.269 55.6771 23.6335 55.3216 24.3627 55.2305C26.0763 54.9388 27.489 54.6745 28.601 54.4375C29.713 54.2005 30.6062 53.8997 31.2807 53.5352C31.9552 53.1523 32.4747 52.6328 32.8393 51.9766C33.2221 51.3021 33.5138 50.4271 33.7143 49.3516C33.933 48.2578 34.1518 46.8633 34.3705 45.168C34.3888 44.8581 34.489 44.612 34.6713 44.4297C34.8718 44.2474 35.127 44.1562 35.4369 44.1562Z" fill="#EBEBEB"/>
+      <path d="M56.8197 9.21094C57.2208 9.21094 57.5671 9.34766 57.8588 9.62109C58.1505 9.8763 58.3236 10.2135 58.3783 10.6328C58.8341 14.0964 59.3354 17.0221 59.8822 19.4102C60.4473 21.7799 61.1856 23.7396 62.0971 25.2891C63.0268 26.8203 64.2481 28.0508 65.7611 28.9805C67.2742 29.8919 69.1973 30.612 71.5307 31.1406C73.8822 31.6693 76.7716 32.125 80.1986 32.5078C80.6361 32.5443 80.9916 32.7083 81.2651 33C81.5385 33.2917 81.6752 33.638 81.6752 34.0391C81.6752 34.4583 81.5385 34.8138 81.2651 35.1055C80.9916 35.3971 80.6361 35.5703 80.1986 35.625C76.7716 35.9896 73.8822 36.4362 71.5307 36.9648C69.1973 37.4935 67.2742 38.2227 65.7611 39.1523C64.2481 40.0638 63.0268 41.2943 62.0971 42.8438C61.1856 44.375 60.4473 46.3346 59.8822 48.7227C59.3354 51.0924 58.8341 54 58.3783 57.4453C58.3236 57.8828 58.1505 58.2292 57.8588 58.4844C57.5671 58.7578 57.2208 58.8945 56.8197 58.8945C56.4187 58.8945 56.0723 58.7578 55.7807 58.4844C55.5072 58.2292 55.3432 57.8828 55.2885 57.4453C54.8328 54 54.3223 51.0924 53.7572 48.7227C53.2104 46.3346 52.4721 44.375 51.5424 42.8438C50.6309 41.2943 49.4187 40.0638 47.9057 39.1523C46.3927 38.2227 44.4604 37.4935 42.1088 36.9648C39.7755 36.4362 36.8953 35.9896 33.4682 35.625C33.0307 35.5703 32.6661 35.3971 32.3744 35.1055C32.101 34.8138 31.9643 34.4583 31.9643 34.0391C31.9643 33.638 32.101 33.2917 32.3744 33C32.6661 32.7083 33.0307 32.5443 33.4682 32.5078C36.877 32.0521 39.7481 31.5508 42.0815 31.0039C44.4148 30.4388 46.3289 29.7005 47.8236 28.7891C49.3367 27.8776 50.5489 26.6654 51.4604 25.1523C52.3901 23.6393 53.1374 21.707 53.7026 19.3555C54.2859 17.0039 54.8145 14.0964 55.2885 10.6328C55.3432 10.2135 55.5072 9.8763 55.7807 9.62109C56.0723 9.34766 56.4187 9.21094 56.8197 9.21094ZM35.4369 44.1562C35.7286 44.1562 35.9656 44.2474 36.1479 44.4297C36.3484 44.5938 36.4669 44.8216 36.5033 45.1133C36.7768 47.2279 37.0593 48.8776 37.351 50.0625C37.6427 51.2292 38.0984 52.1133 38.7182 52.7148C39.338 53.3164 40.2677 53.7812 41.5072 54.1094C42.7468 54.4375 44.4513 54.8112 46.6205 55.2305C46.894 55.2669 47.1218 55.3763 47.3041 55.5586C47.4864 55.7409 47.5776 55.987 47.5776 56.2969C47.5776 56.5885 47.4864 56.8255 47.3041 57.0078C47.1218 57.1901 46.894 57.2995 46.6205 57.3359C44.4513 57.6458 42.7468 57.9466 41.5072 58.2383C40.2677 58.5482 39.338 59.013 38.7182 59.6328C38.0984 60.2526 37.6427 61.1641 37.351 62.3672C37.0593 63.5885 36.7768 65.2656 36.5033 67.3984C36.4304 68.0729 36.0749 68.4102 35.4369 68.4102C35.127 68.4102 34.8718 68.319 34.6713 68.1367C34.489 67.9544 34.3888 67.6992 34.3705 67.3711C34.1518 65.694 33.933 64.3177 33.7143 63.2422C33.5138 62.1667 33.2221 61.3099 32.8393 60.6719C32.4565 60.0339 31.9187 59.5326 31.226 59.168C30.5515 58.8034 29.6492 58.4844 28.519 58.2109C27.3888 57.9557 25.9578 57.6641 24.226 57.3359C23.588 57.2266 23.269 56.8802 23.269 56.2969C23.269 55.6771 23.6335 55.3216 24.3627 55.2305C26.0763 54.9388 27.489 54.6745 28.601 54.4375C29.713 54.2005 30.6062 53.8997 31.2807 53.5352C31.9552 53.1523 32.4747 52.6328 32.8393 51.9766C33.2221 51.3021 33.5138 50.4271 33.7143 49.3516C33.933 48.2578 34.1518 46.8633 34.3705 45.168C34.3888 44.8581 34.489 44.612 34.6713 44.4297C34.8718 44.2474 35.127 44.1562 35.4369 44.1562Z" fill="#F7F7F8" mask="url(#path-3-outside-1_412_720)"/>
+    </svg>
+  </div>
+
+  <!-- Greeting -->
+  <div class="greeting-area">
+    <p class="greeting-title">صباح الخير خالد,</p>
+    <p class="greeting-body">كيف يمكنني مساعدتك اليوم؟</p>
+  </div>
+
+  <!-- Shortcut cards -->
+  <div class="main-btns">
+    <!-- Row 1 -->
+    <div class="btn-row btn-row-top">
+      <div class="shortcut-card">
+        <div class="card-icon">
+          <img src="https://www.figma.com/api/mcp/asset/3e6fb72a-52d7-43e2-af18-5c0d7d3849c7" alt="" />
+        </div>
+        <div class="card-text">
+          <span class="card-title">تصعيد الأولويات</span>
+          <span class="card-subtitle">لوحة الأولويات</span>
+        </div>
+      </div>
+      <div class="shortcut-card" id="morningBriefBtn">
+        <div class="card-icon">
+          <img src="https://www.figma.com/api/mcp/asset/3543e5aa-e170-4f8a-bfab-5a90bcbbd774" alt="" />
+        </div>
+        <div class="card-text">
+          <span class="card-title">ملخص الصباح</span>
+          <span class="card-subtitle">بنود اليوم</span>
+        </div>
+      </div>
+    </div>
+    <!-- Row 2 -->
+    <div class="btn-row btn-row-bottom">
+      <div class="shortcut-card">
+        <div class="card-icon">
+          <img src="https://www.figma.com/api/mcp/asset/24a45319-19f7-4e0d-a0de-2b083538698a" alt="" />
+        </div>
+        <div class="card-text">
+          <span class="card-title">تكليف الفريق</span>
+          <span class="card-subtitle">تخصيص المهام</span>
+        </div>
+      </div>
+      <div class="shortcut-card">
+        <div class="card-icon" style="background:none;width:30px;height:30px;padding:0;">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="30" height="30" rx="12" fill="#F7F7F8"/>
+            <path d="M6.58334 14.4998C6.58334 11.5145 6.58334 10.0214 7.51118 9.09434C8.43901 8.1673 9.9313 8.1665 12.9167 8.1665H16.0833C19.0687 8.1665 20.5618 8.1665 21.4888 9.09434C22.4159 10.0222 22.4167 11.5145 22.4167 14.4998V16.0832C22.4167 19.0685 22.4167 20.5616 21.4888 21.4887C20.561 22.4157 19.0687 22.4165 16.0833 22.4165H12.9167C9.9313 22.4165 8.43822 22.4165 7.51118 21.4887C6.58414 20.5608 6.58334 19.0685 6.58334 16.0832V14.4998Z" stroke="#262626" stroke-width="1.5"/>
+            <path d="M15.9999 18.4998C16.133 18.4967 16.2655 18.5204 16.3894 18.5692C16.5133 18.6181 16.6262 18.6913 16.7214 18.7844C16.8167 18.8775 16.8924 18.9887 16.9441 19.1114C16.9958 19.2342 17.0224 19.366 17.0225 19.4993C17.0225 19.6325 16.9959 19.7643 16.9443 19.8871C16.8927 20.0099 16.817 20.1211 16.7218 20.2143C16.6266 20.3074 16.5137 20.3806 16.3898 20.4296C16.2659 20.4785 16.1335 20.5022 16.0004 20.4993C15.7391 20.4935 15.4904 20.3856 15.3077 20.1988C15.1249 20.012 15.0225 19.7611 15.0225 19.4998C15.0224 19.2384 15.1246 18.9874 15.3073 18.8005C15.49 18.6136 15.7386 18.5057 15.9999 18.4998ZM15.9999 13.4998C16.1988 13.4998 16.3895 13.5788 16.5302 13.7194C16.6708 13.8601 16.7499 14.0508 16.7499 14.2498V17.2498C16.7499 17.4487 16.6708 17.6394 16.5302 17.7801C16.3895 17.9207 16.1988 17.9998 15.9999 17.9998C15.8009 17.9998 15.6102 17.9207 15.4695 17.7801C15.3289 17.6394 15.2499 17.4487 15.2499 17.2498V14.2498C15.2499 14.0508 15.3289 13.8601 15.4695 13.7194C15.6102 13.5788 15.8009 13.4998 15.9999 13.4998Z" fill="#C0392B"/>
+            <path d="M6.58334 12.1249H22.4167" stroke="#6B6B6B" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10.5417 8.1665V6.979M18.4584 8.1665V6.979" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-text">
+          <span class="card-title">بنود المتأخرة</span>
+          <span class="card-subtitle">تستدعي الاهتمام</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ask Nexus input bar -->
+  <div class="ask-bar-wrapper">
+    <div class="ask-bar-container">
+      <div class="ask-bar-bg"></div>
+      <div class="ask-bar-label">اسأل نيكسس .....</div>
+      <!-- Input area -->
+      <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
+      <!-- Add file icon (inside input, right side) -->
+      <div class="ask-bar-add-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <!-- Mic button -->
+      <div class="ask-bar-btn ask-bar-mic">
+        <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+          <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
+          <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="7" y1="14.5" x2="7" y2="17" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <!-- Voice/wave button -->
+      <div class="ask-bar-btn ask-bar-voice">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <rect x="0"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+          <rect x="4"  y="0" width="2.5" height="12" rx="1.25" fill="#262626"/>
+          <rect x="8"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+          <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="#262626"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Home indicator -->
+  <div class="home-indicator">
+    <div class="home-bar"></div>
+  </div>
+
+  </div><!-- /screen-home -->
+</div><!-- /phone -->
+
+<script>
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours().toString().padStart(2, '0');
+    const m = now.getMinutes().toString().padStart(2, '0');
+    document.querySelectorAll('.clock').forEach(el => el.textContent = `${h}:${m}`);
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Reveal-drawer navigation
+  const phone = document.querySelector('.phone');
+  // Avatar → open settings
+  document.querySelector('.nav-avatar').addEventListener('click', () => {
+    phone.classList.add('settings-open');
+  });
+  // Back button → close settings
+  document.querySelector('.settings-back').addEventListener('click', () => {
+    phone.classList.remove('settings-open');
+  });
+  // Click on visible home card → close settings
+  document.getElementById('homeOverlay').addEventListener('click', () => {
+    phone.classList.remove('settings-open');
+  });
+
+  // Morning brief: open on card click, close on back button
+  document.getElementById('morningBriefBtn').addEventListener('click', () => {
+    phone.classList.add('morning-open');
+  });
+  document.getElementById('morningBriefBack').addEventListener('click', () => {
+    phone.classList.remove('morning-open');
+  });
+</script>
+
+</body>
+</html>
