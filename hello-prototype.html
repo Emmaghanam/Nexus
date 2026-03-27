@@ -351,42 +351,58 @@
       opacity: 0.2;
     }
 
-    /* ── Screens slide system ── */
-    .screens-wrapper {
-      display: flex;
-      width: 786px;
-      height: 852px;
-      transform: translateX(0);
-      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      will-change: transform;
-    }
-    .screens-wrapper.show-settings { transform: translateX(-393px); }
-    .screen {
-      width: 393px;
-      height: 852px;
-      flex-shrink: 0;
+    /* ── Reveal-drawer system ── */
+    .screen-settings {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: #F7F7F8;
+      z-index: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      position: relative;
+      scrollbar-width: none;
+      padding-top: 59px;
       display: flex;
       flex-direction: column;
     }
-    .screen::-webkit-scrollbar { display: none; }
-    .screen { scrollbar-width: none; }
+    .screen-settings::-webkit-scrollbar { display: none; }
+    .screen-settings > * { padding-left: 100px; }
 
-    /* ── Settings screen ── */
-    .screen-home { order: 1; }
-    .screen-settings {
-      order: 2;
+    .screen-home {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
       background: #F7F7F8;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+                  border-radius 0.4s, box-shadow 0.4s;
+      will-change: transform;
+      overflow: hidden;
     }
+    .phone.settings-open .screen-home {
+      transform: translateX(-304px);
+      border-radius: 9.6px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0px 3px 15px 3px rgba(0,0,0,0.04);
+      pointer-events: none;
+    }
+    /* Clickable overlay on home when settings open */
+    .home-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      z-index: 3;
+      cursor: pointer;
+    }
+    .phone.settings-open .home-overlay { display: block; }
     .settings-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 24px 0;
+      padding: 8px 24px 0 0;
       direction: rtl;
       flex-shrink: 0;
     }
@@ -400,6 +416,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: absolute;
+      left: 110px;
+      top: 67px;
+      z-index: 4;
     }
     .settings-title {
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -414,7 +434,7 @@
     }
     /* Profile card */
     .profile-card {
-      margin: 12px 24px;
+      margin: 12px 24px 12px 0;
       background: white;
       border: 1px solid #eee;
       border-radius: 16px;
@@ -561,6 +581,282 @@
       justify-content: center;
     }
     .settings-spacer { height: 40px; flex-shrink: 0; }
+
+    /* ── Morning Brief screen ── */
+    .screen-morning-brief {
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: #F7F7F8;
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+    .phone.morning-open .screen-morning-brief {
+      transform: translateX(0);
+    }
+    .morning-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      padding: 0 0 8px;
+    }
+    .morning-scroll::-webkit-scrollbar { display: none; }
+
+    /* Morning brief main card */
+    .mb-card {
+      margin: 0 16px 0 24px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mb-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 0 16px;
+      height: 50px;
+      border-bottom: 1px solid #eee;
+      direction: rtl;
+    }
+    .mb-card-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+    }
+    .mb-card-date {
+      flex: 1;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: left;
+    }
+    .mb-icon {
+      width: 32px; height: 32px;
+      background: #F7F7F8;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .mb-icon img { width: 21px; height: 21px; object-fit: contain; }
+
+    /* Counter row */
+    .mb-counter {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      padding: 8px 16px;
+      direction: rtl;
+    }
+    .mb-counter-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #263238;
+    }
+    .mb-counter-badge {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 0 8px;
+      height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+    }
+
+    /* Priority group */
+    .mb-priority-group {
+      margin: 0 16px 8px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .mb-priority-header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      height: 32px;
+      padding: 0 13px;
+      direction: rtl;
+    }
+    .mb-priority-header.critical { background: #fdecea; }
+    .mb-priority-header.high     { background: #feebc8; }
+    .mb-priority-header.medium   { background: #f8f8e5; }
+    .mb-priority-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mb-priority-label.critical { color: #8b1515; }
+    .mb-priority-label.high     { color: #b7791f; }
+    .mb-priority-label.medium   { color: #d28a23; }
+    .mb-priority-count {
+      background: white;
+      border-radius: 60px;
+      width: 16px; height: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .mb-priority-count.critical { color: #8b1515; }
+    .mb-priority-count.high     { color: #b7791f; }
+    .mb-priority-count.medium   { color: #d28a23; }
+
+    /* Task card row */
+    .mb-task-card {
+      background: white;
+      border: 1px solid #eee;
+      height: 70px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 0 16px 0 20px;
+      direction: rtl;
+      gap: 8px;
+    }
+    .mb-task-card:not(:last-child) { border-bottom: 1px solid #eee; border-top: none; }
+    .mb-task-card:last-child { border-radius: 0 0 8px 8px; }
+
+    /* Left urgency bar (visual left edge) */
+    .mb-task-bar {
+      position: absolute;
+      left: 0; top: 18px; bottom: 20px;
+      width: 3px;
+      border-radius: 3px;
+    }
+    .mb-task-bar.critical { background: #8b1515; }
+    .mb-task-bar.high     { background: #b7791f; }
+    .mb-task-bar.medium   { background: #8b1515; }
+
+    .mb-task-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+    .mb-task-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+      text-align: right;
+      width: 100%;
+    }
+    .mb-task-sub {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: right;
+      width: 100%;
+    }
+
+    /* Time badge */
+    .mb-time-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .mb-time-badge.critical { background: #fdecea; color: #8b1515; }
+    .mb-time-badge.high     { background: #feebc8; color: #b7791f; }
+    .mb-time-badge.elevated { background: #ebf2fa; color: #2b6cb0; }
+
+    /* Progress row */
+    .mb-progress {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      direction: rtl;
+      flex-shrink: 0;
+    }
+    .mb-progress-circles {
+      display: flex;
+      gap: 4px;
+    }
+    .mb-progress-circle {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 1px solid #a0a0a0;
+      background: #F7F7F8;
+    }
+    .mb-progress-text {
+      flex: 1;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6b6b6b;
+      text-align: right;
+    }
+
+    /* Timestamp */
+    .mb-timestamp {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: black;
+      text-align: center;
+      letter-spacing: 0.35px;
+      padding: 2px 0 8px;
+      flex-shrink: 0;
+    }
+
+    /* Bottom chips */
+    .mb-options {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      padding: 6px 20px;
+      flex-shrink: 0;
+      direction: rtl;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .mb-options::-webkit-scrollbar { display: none; }
+    .mb-chip {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .mb-chip-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      letter-spacing: 0.35px;
+    }
   </style>
 </head>
 <body>
@@ -568,10 +864,11 @@
 <div class="phone">
   <div class="notch"></div>
 
-  <div class="screens-wrapper" id="screensWrapper">
+  <!-- Clickable overlay to close settings -->
+  <div class="home-overlay" id="homeOverlay"></div>
 
-  <!-- ════ SETTINGS SCREEN (right, hidden initially) ════ -->
-  <div class="screen screen-settings" id="settingsScreen">
+  <!-- ════ SETTINGS SCREEN (background layer) ════ -->
+  <div class="screen-settings" id="settingsScreen">
     <!-- Status bar -->
     <div class="status-bar">
       <span class="clock">9:41</span>
@@ -689,8 +986,166 @@
     <div class="settings-spacer"></div>
   </div>
 
-  <!-- ════ HOME SCREEN (right) ════ -->
-  <div class="screen screen-home" id="homeScreen">
+  <!-- ════ MORNING BRIEF SCREEN ════ -->
+  <div class="screen-morning-brief" id="morningBriefScreen">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span class="clock">9:41</span>
+      <div class="status-icons">
+        <img src="https://www.figma.com/api/mcp/asset/8f04b7fe-f7b5-4a80-9c54-5a70e5cab32f" alt="signal" />
+        <img src="https://www.figma.com/api/mcp/asset/57be25a5-7bec-487c-a13d-e469e02b6075" alt="wifi" />
+        <img src="https://www.figma.com/api/mcp/asset/eff15892-76ae-4524-b5c3-071aa0583b77" alt="battery" class="battery" />
+      </div>
+    </div>
+    <!-- Nav bar -->
+    <div class="nav-bar">
+      <button class="nav-history-btn" id="morningBriefBack" aria-label="Back">
+        <svg width="18" height="13" viewBox="0 0 18 13" fill="none">
+          <line x1="0" y1="1"   x2="18" y2="1"   stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="6.5" x2="12" y2="6.5" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="0" y1="12"  x2="18" y2="12"  stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="nav-title">نيكسس</span>
+      <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/667f568e-060f-487e-86a3-acea63ca6b1d" alt="user avatar" />
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="morning-scroll">
+      <!-- Main card -->
+      <div class="mb-card">
+        <div class="mb-card-header">
+          <div class="mb-icon">
+            <img src="https://www.figma.com/api/mcp/asset/3def21c3-f69e-4485-ac37-a18463484676" alt="" />
+          </div>
+          <span class="mb-card-title">ملخص الصباح</span>
+          <span class="mb-card-date">١٨ مارس ٢٠٢٦</span>
+        </div>
+
+        <!-- Counter -->
+        <div class="mb-counter">
+          <span class="mb-counter-text">بنود تستدعي اهتمامك اليوم</span>
+          <div class="mb-counter-badge">٤</div>
+        </div>
+
+        <!-- Critical group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header critical">
+            <span class="mb-priority-label critical">بالغة الأهمية</span>
+            <div class="mb-priority-count critical">٢</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar critical"></div>
+            <div class="mb-time-badge critical">متأخر يومان ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">مراجعة عقد البنية التحتية</span>
+              <span class="mb-task-sub">عقد ٢٤٠م درهم · دفعة ثالثة معلّقة</span>
+            </div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar critical"></div>
+            <div class="mb-time-badge critical">متأخر يومان ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">قرارات مجلس الإدارة · فبراير</span>
+              <span class="mb-task-sub">٨ قرارات · في انتظار الأقسام</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- High group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header high">
+            <span class="mb-priority-label high">أهمية عالية</span>
+            <div class="mb-priority-count high">١</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar high"></div>
+            <div class="mb-time-badge high">اليوم ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">خارطة البنية الرقمية · م٢</span>
+              <span class="mb-task-sub">مكتمل ٦٠٪ · مراجعة مطلوبة</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Medium group -->
+        <div class="mb-priority-group">
+          <div class="mb-priority-header medium">
+            <span class="mb-priority-label medium">أهمية مرتفعة</span>
+            <div class="mb-priority-count medium">١</div>
+          </div>
+          <div class="mb-task-card">
+            <div class="mb-task-bar medium"></div>
+            <div class="mb-time-badge elevated">الجمعة ◷</div>
+            <div class="mb-task-info">
+              <span class="mb-task-title">تقرير الأداء الحكومي · ر١</span>
+              <span class="mb-task-sub">مكتمل ٧٠٪ · للديوان الأميري</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="mb-progress">
+          <div class="mb-progress-circles">
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+            <div class="mb-progress-circle"></div>
+          </div>
+          <span class="mb-progress-text">تقدم الملخص صفر من ٤ بنود</span>
+        </div>
+        <div class="mb-timestamp">٦:٢٠ ص</div>
+      </div><!-- /mb-card -->
+
+      <!-- Bottom action chips -->
+      <div class="mb-options">
+        <div class="mb-chip"><span class="mb-chip-text">تجاهل الكل</span></div>
+        <div class="mb-chip">
+          <span class="mb-chip-text">من المسؤول عن العقد؟</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#263238" stroke-width="1.5"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="mb-chip">
+          <span class="mb-chip-text">صعّد العقد</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 19V5m0 0l-5 5m5-5l5 5" stroke="#263238" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Ask Nexus bar -->
+      <div class="ask-bar-wrapper">
+        <div class="ask-bar-container">
+          <div class="ask-bar-bg"></div>
+          <div class="ask-bar-label">اسأل نيكسس .....</div>
+          <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
+          <div class="ask-bar-add-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ask-bar-btn ask-bar-mic">
+            <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
+              <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
+              <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+              <line x1="7" y1="14.5" x2="7" y2="17" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ask-bar-btn ask-bar-voice">
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+              <rect x="0"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+              <rect x="4"  y="0" width="2.5" height="12" rx="1.25" fill="#262626"/>
+              <rect x="8"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
+              <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="#262626"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Home indicator -->
+      <div class="home-indicator"><div class="home-bar"></div></div>
+    </div><!-- /morning-scroll -->
+  </div><!-- /screen-morning-brief -->
+
+  <!-- ════ HOME SCREEN (foreground card) ════ -->
+  <div class="screen-home" id="homeScreen">
 
   <!-- Noise texture SVG background -->
   <svg class="phone-bg" viewBox="0 0 393 852" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
@@ -774,7 +1229,7 @@
           <span class="card-subtitle">لوحة الأولويات</span>
         </div>
       </div>
-      <div class="shortcut-card">
+      <div class="shortcut-card" id="morningBriefBtn">
         <div class="card-icon">
           <img src="https://www.figma.com/api/mcp/asset/3543e5aa-e170-4f8a-bfab-5a90bcbbd774" alt="" />
         </div>
@@ -853,7 +1308,6 @@
   </div>
 
   </div><!-- /screen-home -->
-  </div><!-- /screens-wrapper -->
 </div><!-- /phone -->
 
 <script>
@@ -867,15 +1321,27 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  // Slide navigation
-  const wrapper = document.getElementById('screensWrapper');
+  // Reveal-drawer navigation
+  const phone = document.querySelector('.phone');
   // Avatar → open settings
   document.querySelector('.nav-avatar').addEventListener('click', () => {
-    wrapper.classList.add('show-settings');
+    phone.classList.add('settings-open');
   });
-  // Back → close settings (swipe right on settings or click back btn)
+  // Back button → close settings
   document.querySelector('.settings-back').addEventListener('click', () => {
-    wrapper.classList.remove('show-settings');
+    phone.classList.remove('settings-open');
+  });
+  // Click on visible home card → close settings
+  document.getElementById('homeOverlay').addEventListener('click', () => {
+    phone.classList.remove('settings-open');
+  });
+
+  // Morning brief: open on card click, close on back button
+  document.getElementById('morningBriefBtn').addEventListener('click', () => {
+    phone.classList.add('morning-open');
+  });
+  document.getElementById('morningBriefBack').addEventListener('click', () => {
+    phone.classList.remove('morning-open');
   });
 </script>
 
