@@ -2294,12 +2294,12 @@
     document.getElementById('morningBriefScreen').classList.remove('slide-for-settings');
   }
 
-  // All avatars (across all screens) open settings
+  // All avatars toggle settings open/closed
   document.querySelectorAll('.nav-avatar').forEach(el => {
-    el.addEventListener('click', openSettings);
+    el.addEventListener('click', () => {
+      phone.classList.contains('settings-open') ? closeSettings() : openSettings();
+    });
   });
-  // Back button closes settings
-  document.querySelector('.settings-back').addEventListener('click', closeSettings);
   // Tap on the visible slid-out card also closes settings
   document.getElementById('homeOverlay').addEventListener('click', closeSettings);
 
