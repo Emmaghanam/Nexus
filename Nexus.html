@@ -388,13 +388,21 @@
       box-shadow: 0px 3px 15px 3px rgba(0,0,0,0.04);
       pointer-events: none;
     }
-    /* Clickable overlay on home when settings open */
+    /* Any screen slides left when settings opens from it */
+    .slide-for-settings {
+      transform: translateX(-304px) !important;
+      border-radius: 9.6px !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0px 3px 15px 3px rgba(0,0,0,0.04) !important;
+      pointer-events: none !important;
+    }
+    /* Overlay covers only the visible slid-out card (89px) so settings content stays interactive */
     .home-overlay {
       display: none;
       position: absolute;
       top: 0; left: 0;
-      width: 393px; height: 852px;
-      z-index: 3;
+      width: 89px; height: 852px;
+      z-index: 9;
       cursor: pointer;
     }
     .phone.settings-open .home-overlay { display: block; }
@@ -419,7 +427,7 @@
       position: absolute;
       left: 110px;
       top: 67px;
-      z-index: 4;
+      z-index: 10;
     }
     .settings-title {
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -1840,18 +1848,29 @@
 
   // Reveal-drawer navigation
   const phone = document.querySelector('.phone');
-  // All avatars → open settings
+  // Settings open/close helpers
+  function openSettings() {
+    phone.classList.add('settings-open');
+    // Slide whichever overlay screen is currently visible
+    if (phone.classList.contains('chat-open'))
+      document.getElementById('chatScreen').classList.add('slide-for-settings');
+    else if (phone.classList.contains('morning-open'))
+      document.getElementById('morningBriefScreen').classList.add('slide-for-settings');
+  }
+  function closeSettings() {
+    phone.classList.remove('settings-open');
+    document.getElementById('chatScreen').classList.remove('slide-for-settings');
+    document.getElementById('morningBriefScreen').classList.remove('slide-for-settings');
+  }
+
+  // All avatars (across all screens) open settings
   document.querySelectorAll('.nav-avatar').forEach(el => {
-    el.addEventListener('click', () => phone.classList.add('settings-open'));
+    el.addEventListener('click', openSettings);
   });
-  // Back button → close settings
-  document.querySelector('.settings-back').addEventListener('click', () => {
-    phone.classList.remove('settings-open');
-  });
-  // Click on home card overlay → close settings
-  document.getElementById('homeOverlay').addEventListener('click', () => {
-    phone.classList.remove('settings-open');
-  });
+  // Back button closes settings
+  document.querySelector('.settings-back').addEventListener('click', closeSettings);
+  // Tap on the visible slid-out card also closes settings
+  document.getElementById('homeOverlay').addEventListener('click', closeSettings);
 
   // Morning brief: open on card click, close on back button
   document.getElementById('morningBriefBtn').addEventListener('click', () => {
