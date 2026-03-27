@@ -1149,6 +1149,286 @@
       color: #263238;
       letter-spacing: 0.35px;
     }
+
+    /* ── Bottom Sheet ── */
+    .sheet-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 393px; height: 852px;
+      background: rgba(0,0,0,0.2);
+      z-index: 10;
+    }
+    .phone.sheet-open .sheet-overlay { display: block; }
+
+    .bottom-sheet {
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 393px;
+      height: 788px;
+      background: white;
+      border-radius: 38px 38px 0 0;
+      box-shadow: 0px 15px 75px 0px rgba(0,0,0,0.18);
+      z-index: 11;
+      transform: translateY(100%);
+      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .phone.sheet-open .bottom-sheet { transform: translateY(0); }
+
+    .sheet-grabber-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 14px 0 10px;
+      flex-shrink: 0;
+      cursor: grab;
+    }
+    .sheet-grabber {
+      width: 36px; height: 5px;
+      background: #ccc;
+      border-radius: 100px;
+    }
+
+    .sheet-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      padding: 0 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      direction: rtl;
+    }
+    .sheet-scroll::-webkit-scrollbar { display: none; }
+
+    /* Sheet title row */
+    .sheet-title-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      direction: rtl;
+      padding: 4px 0 0;
+    }
+    .sheet-title {
+      flex: 1;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #263238;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    /* Badges */
+    .sheet-badges {
+      display: flex;
+      gap: 6px;
+      direction: rtl;
+      flex-wrap: wrap;
+    }
+    .sheet-badge {
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .sheet-badge.priority { background: #fdecea; color: #8b1515; }
+    .sheet-badge.delay    { background: #F7F7F8; color: #263238; }
+
+    /* Assignee card */
+    .sheet-card {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sheet-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      direction: rtl;
+    }
+    .sheet-card-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sheet-card-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .sheet-card-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #78777c;
+    }
+    .sheet-assignee-name {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #263238;
+      text-align: right;
+    }
+    .sheet-assignee-role {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #78777c;
+      text-align: right;
+      line-height: 1.5;
+    }
+    .sheet-due {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      direction: rtl;
+      padding-top: 4px;
+      border-top: 1px solid #eee;
+    }
+    .sheet-due-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #78777c;
+    }
+    .sheet-due-value {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8b1515;
+    }
+
+    /* AI context card */
+    .sheet-ai-card {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sheet-ai-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      direction: rtl;
+    }
+    .sheet-ai-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #263238;
+    }
+    .sheet-ai-body {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #78777c;
+      line-height: 1.6;
+      text-align: right;
+    }
+
+    /* Timeline card */
+    .sheet-timeline-card {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sheet-timeline-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #263238;
+      text-align: right;
+    }
+    .timeline-event {
+      display: flex;
+      gap: 10px;
+      direction: rtl;
+      align-items: flex-start;
+    }
+    .timeline-dot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      width: 12px;
+      flex-shrink: 0;
+      padding-top: 4px;
+    }
+    .timeline-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #8b1515;
+      flex-shrink: 0;
+    }
+    .timeline-line {
+      width: 1px;
+      flex: 1;
+      min-height: 20px;
+      background: #ddd;
+      margin: 2px 0;
+    }
+    .timeline-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .timeline-date {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      color: #78777c;
+    }
+    .timeline-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      line-height: 1.5;
+    }
+
+    /* Suggested questions */
+    .sheet-questions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sheet-question-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #78777c;
+      text-align: right;
+    }
+    .sheet-question-chip {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 16px;
+      padding: 8px 12px;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #263238;
+      text-align: right;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      direction: rtl;
+    }
   </style>
 </head>
 <body>
@@ -1321,7 +1601,7 @@
             <span class="mb-priority-label critical">بالغة الأهمية</span>
             <div class="mb-priority-count critical">٢</div>
           </div>
-          <div class="mb-task-card">
+          <div class="mb-task-card" id="contractCard" style="cursor:pointer;">
             <div class="mb-task-bar critical"></div>
             <div class="mb-task-info">
               <span class="mb-task-title">مراجعة عقد البنية التحتية</span>
@@ -1827,6 +2107,113 @@
   </div>
 
   </div><!-- /screen-home -->
+
+  <!-- ════ BOTTOM SHEET OVERLAY ════ -->
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+
+  <!-- ════ BOTTOM SHEET: مراجعة عقد البنية التحتية ════ -->
+  <div class="bottom-sheet" id="contractSheet">
+    <!-- Grabber -->
+    <div class="sheet-grabber-wrap" id="sheetGrabber">
+      <div class="sheet-grabber"></div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="sheet-scroll">
+      <!-- Title + badges -->
+      <div class="sheet-title-row">
+        <span class="sheet-title">مراجعة عقد البنية التحتية</span>
+      </div>
+      <div class="sheet-badges">
+        <div class="sheet-badge priority">أولوية قصوى</div>
+        <div class="sheet-badge delay">◷ متأخر يومان</div>
+      </div>
+
+      <!-- Assignee card -->
+      <div class="sheet-card">
+        <div class="sheet-card-header">
+          <div class="sheet-card-icon">
+            <img src="https://www.figma.com/api/mcp/asset/2cf0a3f5-290a-4f54-963b-e86d1cf1178d" alt="أحمد" />
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:2px;align-items:flex-end;">
+            <span class="sheet-assignee-name">أحمد الحوسني</span>
+            <span class="sheet-assignee-role">مدير مشاريع التحول الرقمي<br>دائرة التخطيط والأداء المؤسسي</span>
+          </div>
+          <span class="sheet-card-label">المسؤول</span>
+        </div>
+        <div class="sheet-due">
+          <span class="sheet-due-value">استحق ١٦ مارس ٢٠٢٦</span>
+          <span class="sheet-due-label">الموعد النهائي</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="#8b1515" stroke-width="1.5"/><path d="M3 10h18M8 2v4M16 2v4" stroke="#8b1515" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <!-- AI Context Summary -->
+      <div class="sheet-ai-card">
+        <div class="sheet-ai-header">
+          <span class="sheet-ai-title">ملخص سياق الذكاء الاصطناعي</span>
+          <!-- Mini Nexus logo -->
+          <svg width="20" height="20" viewBox="0 0 108 132" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;opacity:0.4">
+            <path d="M18.1184 76.6514C8.03948 72.6219 3 70.6071 3 68.1C3 65.593 8.03948 63.5833 18.1184 59.5487L32.369 53.8494C42.448 49.8148 47.4925 47.8 53.75 47.8C60.0075 47.8 65.052 49.8148 75.131 53.8494L89.3816 59.5487C99.4605 63.5782 104.5 65.593 104.5 68.1C104.5 70.6071 99.4605 72.6168 89.3816 76.6514L75.131 82.3557C65.052 86.3853 60.0075 88.4 53.75 88.4C47.4925 88.4 42.448 86.3853 32.369 82.3557L18.1184 76.6514Z" stroke="#263238" stroke-width="6"/>
+          </svg>
+        </div>
+        <p class="sheet-ai-body">
+          العقد بقيمة ٢٤٠ مليون درهم في مرحلة الدفعة الثالثة المعلّقة. لم يرفع أحمد الحوسني أي تحديث منذ ٣ أيام من تاريخ الاستحقاق. يُقترح التصعيد الفوري لتجنّب تأثير إضافي على الجدول الزمني.
+        </p>
+      </div>
+
+      <!-- Activity Timeline -->
+      <div class="sheet-timeline-card">
+        <span class="sheet-timeline-title">الجدول الزمني للنشاط</span>
+
+        <div class="timeline-event">
+          <div class="timeline-dot-col">
+            <div class="timeline-dot"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-date">١٦ مارس ٢٠٢٦</span>
+            <span class="timeline-text">انتهى الموعد النهائي — لا يوجد تحديث</span>
+          </div>
+        </div>
+
+        <div class="timeline-event">
+          <div class="timeline-dot-col">
+            <div class="timeline-dot" style="background:#b7791f"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-date">١٤ مارس ٢٠٢٦</span>
+            <span class="timeline-text">أُسندت المهمة إلى أحمد الحوسني</span>
+          </div>
+        </div>
+
+        <div class="timeline-event">
+          <div class="timeline-dot-col">
+            <div class="timeline-dot" style="background:#78777c"></div>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-date">١٠ مارس ٢٠٢٦</span>
+            <span class="timeline-text">مراجعة بنود الأداء — طلب مستندات إضافية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggested questions -->
+      <div class="sheet-questions">
+        <span class="sheet-question-label">أسئلة مقترحة</span>
+        <div class="sheet-question-chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#263238" stroke-width="1.5"/><path d="M21 21l-4-4" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>ما تفاصيل الميزانية؟</span>
+        </div>
+        <div class="sheet-question-chip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#263238" stroke-width="1.5"/><path d="M21 21l-4-4" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>ما تأثير التأخير على الجدول الزمني؟</span>
+        </div>
+      </div>
+    </div><!-- /sheet-scroll -->
+  </div><!-- /bottom-sheet -->
+
 </div><!-- /phone -->
 
 <script>
@@ -1982,6 +2369,52 @@
       scrollChat();
     }, 700);
   }
+
+  // ── Bottom Sheet ──
+  const contractSheet = document.getElementById('contractSheet');
+  const sheetOverlay  = document.getElementById('sheetOverlay');
+
+  function openSheet() {
+    phone.classList.add('sheet-open');
+  }
+  function closeSheet() {
+    phone.classList.remove('sheet-open');
+  }
+
+  document.getElementById('contractCard').addEventListener('click', openSheet);
+  sheetOverlay.addEventListener('click', closeSheet);
+
+  // Drag-to-dismiss
+  let touchStartY = 0;
+  let touchCurrentY = 0;
+  let isDragging = false;
+
+  contractSheet.addEventListener('touchstart', e => {
+    touchStartY = e.touches[0].clientY;
+    touchCurrentY = touchStartY;
+    isDragging = true;
+  }, { passive: true });
+
+  contractSheet.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    touchCurrentY = e.touches[0].clientY;
+    const delta = touchCurrentY - touchStartY;
+    if (delta > 0) {
+      contractSheet.style.transition = 'none';
+      contractSheet.style.transform = `translateY(${delta}px)`;
+    }
+  }, { passive: true });
+
+  contractSheet.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    const delta = touchCurrentY - touchStartY;
+    contractSheet.style.transition = '';
+    contractSheet.style.transform = '';
+    if (delta > 80) {
+      closeSheet();
+    }
+  });
 </script>
 
 </body>
