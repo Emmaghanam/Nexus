@@ -1459,6 +1459,40 @@
       font-size: 11px; font-weight: 500; color: #78777c;
     }
 
+    /* ── Mic recording state ── */
+    .ask-bar-mic.recording {
+      background: rgba(213,52,58,0.12);
+      border-radius: 50%;
+      animation: micPulse 1s infinite;
+    }
+    .ask-bar-mic.recording svg rect,
+    .ask-bar-mic.recording svg path,
+    .ask-bar-mic.recording svg line {
+      stroke: #d5343a !important;
+    }
+    @keyframes micPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(213,52,58,0.35); }
+      50%      { box-shadow: 0 0 0 6px rgba(213,52,58,0); }
+    }
+    /* Recording banner inside input */
+    .recording-hint {
+      color: #d5343a !important;
+      font-style: italic;
+    }
+    /* Voice message bubble */
+    .voice-bubble {
+      display: flex; align-items: center; gap: 8px;
+      background: #f0f0f0; border-radius: 16px 16px 4px 16px;
+      padding: 8px 12px; max-width: 80%;
+      align-self: flex-end; margin: 4px 0;
+      direction: rtl;
+    }
+    .voice-bubble audio { height: 28px; width: 160px; outline: none; }
+    .voice-bubble-label {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 11px; color: #78777c;
+    }
+
     /* ── Typing indicator ── */
     .chat-typing { display: flex; align-items: center; gap: 5px; padding: 12px 14px; }
     .typing-dot {
@@ -2022,7 +2056,7 @@
             <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </div>
-        <div class="ask-bar-btn ask-bar-mic">
+        <div class="ask-bar-btn ask-bar-mic" id="chatMicBtn">
           <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
             <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
             <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
@@ -2723,6 +2757,121 @@
       closeSheet();
     }
   });
+
+  // ── Voice Recording ──
+  (function setupVoice() {
+    const micBtn   = document.getElementById('chatMicBtn');
+    const inputEl  = document.getElementById('chatInput');
+    if (!micBtn) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition   = null;
+    let mediaRecorder = null;
+    let audioChunks   = [];
+    let isRecording   = false;
+    let finalTranscript = '';
+
+    async function startRecording() {
+      isRecording = true;
+      finalTranscript = '';
+      audioChunks = [];
+      micBtn.classList.add('recording');
+      inputEl.placeholder = '● يستمع...';
+      inputEl.classList.add('recording-hint');
+
+      // 1. MediaRecorder — capture raw audio for playback
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.start();
+      } catch(e) { console.warn('MediaRecorder unavailable:', e); }
+
+      // 2. SpeechRecognition — live Arabic transcription
+      if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ar-AE';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onresult = e => {
+          let interim = '';
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
+            else interim += e.results[i][0].transcript;
+          }
+          inputEl.value = finalTranscript + interim;
+        };
+
+        recognition.onerror = e => console.warn('Speech error:', e.error);
+        recognition.onend   = () => { if (isRecording) stopRecording(); };
+        recognition.start();
+      }
+    }
+
+    async function stopRecording() {
+      if (!isRecording) return;
+      isRecording = false;
+      micBtn.classList.remove('recording');
+      inputEl.placeholder = 'اكتب هنا...';
+      inputEl.classList.remove('recording-hint');
+
+      if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
+
+      // Stop MediaRecorder and build audio blob
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stream.getTracks().forEach(t => t.stop());
+        await new Promise(resolve => {
+          mediaRecorder.onstop = resolve;
+          mediaRecorder.stop();
+        });
+      }
+
+      const transcript = finalTranscript.trim() || inputEl.value.trim();
+      inputEl.value = '';
+
+      if (!transcript) return;
+
+      // Show voice message bubble in chat
+      if (audioChunks.length > 0) {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const url  = URL.createObjectURL(blob);
+        const voiceDiv = document.createElement('div');
+        voiceDiv.className = 'voice-bubble';
+        voiceDiv.innerHTML = `
+          <div>
+            <div class="voice-bubble-label">رسالة صوتية</div>
+            <audio src="${url}" controls></audio>
+          </div>`;
+        chatMessages.appendChild(voiceDiv);
+        scrollChat();
+      } else {
+        // No audio recorded — just show text bubble
+        const userBubble = document.createElement('div');
+        userBubble.className = 'chat-user';
+        userBubble.textContent = transcript;
+        chatMessages.appendChild(userBubble);
+        scrollChat();
+      }
+
+      // Feed transcript into AI
+      document.getElementById('chatInput').value = transcript;
+      sendTyped();
+    }
+
+    micBtn.addEventListener('click', () => {
+      if (isRecording) stopRecording();
+      else startRecording();
+    });
+
+    // Also wire home & mb mic buttons to open chat and start recording
+    document.querySelectorAll('.ask-bar-mic:not(#chatMicBtn)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        phone.classList.add('chat-open');
+        setTimeout(() => startRecording(), 300);
+      });
+    });
+  })();
 </script>
 
 </body>
