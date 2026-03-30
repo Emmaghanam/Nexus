@@ -2773,9 +2773,13 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
   const homeChat  = document.getElementById('homeChat');
   const homeInput = document.getElementById('homeInput');
 
-  homeInput.addEventListener('focus', () => {
+  function showHomeChat() {
     mainBtns.classList.add('hidden');
     homeChat.classList.add('visible');
+  }
+
+  homeInput.addEventListener('input', () => {
+    if (homeInput.value.trim()) showHomeChat();
   });
 
   homeInput.addEventListener('blur', () => {
@@ -2790,6 +2794,7 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
     e.preventDefault();
     const text = homeInput.value.trim();
     if (!text) return;
+    showHomeChat();
     homeInput.value = '';
 
     // User bubble
@@ -3051,10 +3056,15 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
       else startRecording();
     });
 
-    // Also wire home & mb mic buttons to open chat and start recording
+    // Also wire home & mb mic buttons — home stays on home screen, mb goes to chat
     document.querySelectorAll('.ask-bar-mic:not(#chatMicBtn)').forEach(btn => {
       btn.addEventListener('click', () => {
-        phone.classList.add('chat-open');
+        // If it's the home screen mic, show home chat inline
+        if (typeof showHomeChat === 'function' && btn.closest('#homeScreen, .screen-home, .phone > .ask-bar-wrapper')) {
+          showHomeChat();
+        } else {
+          phone.classList.add('chat-open');
+        }
         setTimeout(() => startRecording(), 300);
       });
     });
