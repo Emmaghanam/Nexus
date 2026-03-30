@@ -33,6 +33,22 @@
       position: relative;
     }
 
+    /* ── Responsive: fill viewport on real mobile ── */
+    @media (max-width: 430px), (max-height: 870px) and (max-width: 430px) {
+      body {
+        background: #F7F7F8;
+        align-items: flex-start;
+        min-height: 100dvh;
+      }
+      .phone {
+        width: 100vw;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .notch { display: none; }
+    }
+
     /* Noise SVG sits behind everything */
     .phone-bg {
       position: absolute;
@@ -2949,7 +2965,7 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
       finalTranscript = '';
       audioChunks = [];
       micBtn.classList.add('recording');
-      inputEl.placeholder = '● يستمع...';
+      inputEl.placeholder = '● جارٍ التسجيل — أفلت للإرسال';
       inputEl.classList.add('recording-hint');
 
       // 1. MediaRecorder — capture raw audio for playback
@@ -3051,22 +3067,40 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
       sendTyped();
     }
 
-    micBtn.addEventListener('click', () => {
+    // Press-and-hold to record, release to send
+    function onHoldStart(e) {
+      e.preventDefault();
+      if (!isRecording) startRecording();
+    }
+    function onHoldEnd(e) {
+      e.preventDefault();
       if (isRecording) stopRecording();
-      else startRecording();
-    });
+    }
+    micBtn.addEventListener('mousedown',  onHoldStart);
+    micBtn.addEventListener('touchstart', onHoldStart, { passive: false });
+    micBtn.addEventListener('mouseup',    onHoldEnd);
+    micBtn.addEventListener('mouseleave', onHoldEnd);
+    micBtn.addEventListener('touchend',   onHoldEnd);
+    micBtn.addEventListener('touchcancel',onHoldEnd);
 
-    // Also wire home & mb mic buttons — home stays on home screen, mb goes to chat
+    // Home & mb mic buttons — press-and-hold
     document.querySelectorAll('.ask-bar-mic:not(#chatMicBtn)').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // If it's the home screen mic, show home chat inline
-        if (typeof showHomeChat === 'function' && btn.closest('#homeScreen, .screen-home, .phone > .ask-bar-wrapper')) {
-          showHomeChat();
-        } else {
-          phone.classList.add('chat-open');
-        }
-        setTimeout(() => startRecording(), 300);
-      });
+      function otherHoldStart(e) {
+        e.preventDefault();
+        if (typeof showHomeChat === 'function') showHomeChat();
+        else phone.classList.add('chat-open');
+        setTimeout(() => { if (!isRecording) startRecording(); }, 200);
+      }
+      function otherHoldEnd(e) {
+        e.preventDefault();
+        if (isRecording) stopRecording();
+      }
+      btn.addEventListener('mousedown',   otherHoldStart);
+      btn.addEventListener('touchstart',  otherHoldStart, { passive: false });
+      btn.addEventListener('mouseup',     otherHoldEnd);
+      btn.addEventListener('mouseleave',  otherHoldEnd);
+      btn.addEventListener('touchend',    otherHoldEnd);
+      btn.addEventListener('touchcancel', otherHoldEnd);
     });
   })();
 </script>
