@@ -1434,12 +1434,76 @@
       justify-content: space-between;
       direction: rtl;
     }
+
+    /* ── Typing indicator ── */
+    .chat-typing { display: flex; align-items: center; gap: 5px; padding: 12px 14px; }
+    .typing-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #b0b0b0;
+      animation: typingBounce 1.2s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+      30% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* ── API Key Modal ── */
+    .api-modal-overlay {
+      display: none; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 50;
+      align-items: center; justify-content: center;
+    }
+    .api-modal-overlay.open { display: flex; }
+    .api-modal {
+      background: white; border-radius: 20px; padding: 24px 20px;
+      width: 320px; direction: rtl; text-align: right;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .api-modal-title {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 15px; font-weight: 700; color: #263238; margin-bottom: 6px;
+    }
+    .api-modal-desc {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 12px; color: #78777c; margin-bottom: 16px; line-height: 1.6;
+    }
+    .api-modal-input {
+      width: 100%; box-sizing: border-box;
+      border: 1px solid #e2e8f0; border-radius: 10px;
+      padding: 10px 12px; font-size: 12px; font-family: monospace;
+      color: #263238; outline: none; margin-bottom: 12px;
+      direction: ltr; text-align: left;
+    }
+    .api-modal-input:focus { border-color: #8b1515; }
+    .api-modal-save {
+      width: 100%; padding: 11px; border: none; border-radius: 10px;
+      background: #8b1515; color: white; font-size: 13px; font-weight: 600;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .api-modal-save:hover { background: #6f1212; }
+    .api-key-btn {
+      background: none; border: none; cursor: pointer; padding: 4px;
+      opacity: 0.5; transition: opacity 0.15s;
+    }
+    .api-key-btn:hover { opacity: 1; }
   </style>
 </head>
 <body>
 
 <div class="phone">
   <div class="notch"></div>
+
+  <!-- API Key Modal -->
+  <div class="api-modal-overlay" id="apiModalOverlay">
+    <div class="api-modal">
+      <div class="api-modal-title">مفتاح Claude API</div>
+      <div class="api-modal-desc">أدخل مفتاح Anthropic API لتفعيل الذكاء الاصطناعي. يُحفظ محلياً في المتصفح فقط.</div>
+      <input class="api-modal-input" id="apiKeyInput" type="password" placeholder="sk-ant-..." />
+      <button class="api-modal-save" id="apiKeySave">حفظ وتفعيل</button>
+    </div>
+  </div>
 
   <!-- Clickable overlay to close settings -->
   <div class="home-overlay" id="homeOverlay"></div>
@@ -1733,7 +1797,12 @@
         </svg>
       </button>
       <span class="nav-title">نيكسس</span>
-      <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/d711d2ee-fa85-4363-bbd1-807401c1dec4" alt="user avatar" />
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="api-key-btn" id="apiKeyBtn" title="API Key">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="15" r="4" stroke="#263238" stroke-width="1.5"/><path d="M11.5 11.5l7-7M17 4l2 2M19 8l2-2" stroke="#263238" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/d711d2ee-fa85-4363-bbd1-807401c1dec4" alt="user avatar" />
+      </div>
     </div>
 
     <!-- Chat messages area -->
@@ -2400,23 +2469,119 @@
     if (e.key === 'Enter') sendTyped();
   });
 
-  function sendTyped() {
+  // ── AI Integration ──
+  const SYSTEM_PROMPT = `أنت نيكسس، مساعد ذكاء اصطناعي متخصص في إدارة المشاريع الحكومية. تعمل لدى م. خالد المنصوري، مدير عام الشؤون الاستراتيجية في أبوظبي.
+
+السياق الحالي:
+- مراجعة عقد البنية التحتية بقيمة ٢٤٠ مليون درهم
+- المسؤول: أحمد الحوسني، مدير مشاريع البنية التحتية، وزارة الطاقة والبنية التحتية
+- الموعد النهائي: ١٥ مارس ٢٠٢٦ (متأخر يومان)
+- آخر تحديث: منذ ٣ أيام — لم يُرفع أي تحديث
+- المرحلة: الدفعة الثالثة المعلّقة
+
+أجب دائماً باللغة العربية بأسلوب مهني ومختصر. قدّم توصيات عملية وقابلة للتنفيذ فقط. لا تتجاوز ٣ أسطر في الرد.`;
+
+  let conversationHistory = [];
+  let apiKey = localStorage.getItem('nexus_api_key') || '';
+
+  // API Key modal logic
+  const apiModalOverlay = document.getElementById('apiModalOverlay');
+  document.getElementById('apiKeyBtn').addEventListener('click', () => {
+    document.getElementById('apiKeyInput').value = apiKey;
+    apiModalOverlay.classList.add('open');
+  });
+  document.getElementById('apiKeySave').addEventListener('click', () => {
+    const val = document.getElementById('apiKeyInput').value.trim();
+    if (val) { apiKey = val; localStorage.setItem('nexus_api_key', val); }
+    apiModalOverlay.classList.remove('open');
+  });
+  apiModalOverlay.addEventListener('click', e => {
+    if (e.target === apiModalOverlay) apiModalOverlay.classList.remove('open');
+  });
+
+  async function sendTyped() {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
     if (!text) return;
+
+    if (!apiKey) {
+      document.getElementById('apiKeyInput').value = '';
+      apiModalOverlay.classList.add('open');
+      return;
+    }
+
     input.value = '';
-    const bubble = document.createElement('div');
-    bubble.className = 'chat-user';
-    bubble.textContent = text;
-    chatMessages.appendChild(bubble);
+
+    // User bubble
+    const userBubble = document.createElement('div');
+    userBubble.className = 'chat-user';
+    userBubble.textContent = text;
+    chatMessages.appendChild(userBubble);
     scrollChat();
-    setTimeout(() => {
-      const reply = document.createElement('div');
-      reply.className = 'chat-ai';
-      reply.textContent = 'جاري معالجة طلبك...';
-      chatMessages.appendChild(reply);
-      scrollChat();
-    }, 700);
+
+    conversationHistory.push({ role: 'user', content: text });
+
+    // Typing indicator
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'chat-ai chat-typing';
+    aiBubble.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+    chatMessages.appendChild(aiBubble);
+    scrollChat();
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 400,
+          system: SYSTEM_PROMPT,
+          messages: conversationHistory,
+          stream: true
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      aiBubble.className = 'chat-ai';
+      aiBubble.textContent = '';
+      let fullText = '';
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        for (const line of chunk.split('\n')) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') break;
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+              fullText += parsed.delta.text;
+              aiBubble.textContent = fullText;
+              scrollChat();
+            }
+          } catch(e) {}
+        }
+      }
+
+      conversationHistory.push({ role: 'assistant', content: fullText });
+
+    } catch(err) {
+      aiBubble.className = 'chat-ai';
+      aiBubble.textContent = 'حدث خطأ في الاتصال. تحقق من مفتاح API والاتصال بالإنترنت.';
+    }
   }
 
   // ── Bottom Sheet ──
