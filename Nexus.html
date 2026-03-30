@@ -2463,12 +2463,7 @@
   }
   document.getElementById('chipReturn').addEventListener('click', handleReturn);
 
-  // Send typed message
-  document.getElementById('chatSendBtn').addEventListener('click', sendTyped);
-  document.getElementById('chatInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendTyped();
-  });
-
+  // Send typed message — listeners registered after sendTyped is defined below
   // ── AI Integration ──
   const SYSTEM_PROMPT = `أنت نيكسس، مساعد ذكاء اصطناعي متخصص في إدارة المشاريع الحكومية. تعمل لدى م. خالد المنصوري، مدير عام الشؤون الاستراتيجية في أبوظبي.
 
@@ -2507,6 +2502,13 @@
     if (!apiKey) {
       document.getElementById('apiKeyInput').value = '';
       apiModalOverlay.classList.add('open');
+      // also surface a chat hint if not already there
+      if (!document.getElementById('apiHintMsg')) {
+        const hint = document.createElement('div');
+        hint.className = 'chat-ai'; hint.id = 'apiHintMsg';
+        hint.textContent = 'أدخل مفتاح Anthropic API عبر أيقونة 🔑 في الأعلى لتفعيل الردود.';
+        chatMessages.appendChild(hint); scrollChat();
+      }
       return;
     }
 
@@ -2581,8 +2583,25 @@
     } catch(err) {
       aiBubble.className = 'chat-ai';
       aiBubble.textContent = 'حدث خطأ في الاتصال. تحقق من مفتاح API والاتصال بالإنترنت.';
+      console.error('AI error:', err);
     }
   }
+
+  // Register send listeners after sendTyped is defined
+  document.getElementById('chatSendBtn').addEventListener('click', sendTyped);
+  document.getElementById('chatInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); sendTyped(); }
+  });
+
+  // If no API key yet, drop a hint in chat on first open
+  document.getElementById('chatBtn') && document.getElementById('chatBtn').addEventListener('click', () => {
+    if (!apiKey && !document.getElementById('apiHintMsg')) {
+      const hint = document.createElement('div');
+      hint.className = 'chat-ai'; hint.id = 'apiHintMsg';
+      hint.innerHTML = 'لبدء المحادثة مع الذكاء الاصطناعي، اضغط أيقونة 🔑 في الأعلى وأدخل مفتاح Anthropic API.';
+      chatMessages.appendChild(hint); scrollChat();
+    }
+  });
 
   // ── Bottom Sheet ──
   const contractSheet = document.getElementById('contractSheet');
