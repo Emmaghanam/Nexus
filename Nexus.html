@@ -1747,7 +1747,7 @@
         <div class="ask-bar-container">
           <div class="ask-bar-bg"></div>
           <div class="ask-bar-label">اسأل نيكسس .....</div>
-          <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
+          <input type="text" class="ask-bar-input" id="mbInput" placeholder="اكتب هنا..." />
           <div class="ask-bar-add-icon">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
@@ -2143,14 +2143,7 @@
       <div class="ask-bar-bg"></div>
       <div class="ask-bar-label">اسأل نيكسس .....</div>
       <!-- Input area -->
-      <input type="text" class="ask-bar-input" placeholder="اكتب هنا..." />
-      <!-- Add file icon (inside input, right side) -->
-      <div class="ask-bar-add-icon">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <line x1="8" y1="2" x2="8" y2="14" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="2" y1="8" x2="14" y2="8" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </div>
+      <input type="text" class="ask-bar-input" id="homeInput" placeholder="اكتب هنا..." />
       <!-- Mic button -->
       <div class="ask-bar-btn ask-bar-mic">
         <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
@@ -2610,10 +2603,32 @@
     }, 18);
   }
 
+  // Helper: open chat screen then send a message
+  function sendFromBar(inputEl) {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    inputEl.value = '';
+    // Navigate to chat screen if not already there
+    phone.classList.add('chat-open');
+    // Small delay to let screen transition, then inject into chat input and send
+    setTimeout(() => {
+      document.getElementById('chatInput').value = text;
+      sendTyped();
+    }, 200);
+  }
+
   // Register send listeners after sendTyped is defined
   document.getElementById('chatSendBtn').addEventListener('click', sendTyped);
   document.getElementById('chatInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); sendTyped(); }
+  });
+  // Home screen ask bar
+  document.getElementById('homeInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); sendFromBar(e.target); }
+  });
+  // Morning brief ask bar
+  document.getElementById('mbInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); sendFromBar(e.target); }
   });
 
   // If no API key yet, drop a hint in chat on first open
