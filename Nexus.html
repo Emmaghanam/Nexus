@@ -208,6 +208,34 @@
     .shortcut-card:active { transform: scale(0.97); }
     .shortcut-card { width: 156px; }
 
+    /* ── Home chat mode ── */
+    #mainBtns {
+      transition: opacity 0.22s, transform 0.22s;
+    }
+    #mainBtns.hidden {
+      opacity: 0; transform: translateY(-12px);
+      pointer-events: none; height: 0; overflow: hidden; margin: 0;
+    }
+    .home-chat {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 0 16px; overflow-y: auto;
+      max-height: 320px; width: 100%; box-sizing: border-box;
+      opacity: 0; transition: opacity 0.22s;
+    }
+    .home-chat.visible { opacity: 1; }
+    .home-chat .chat-ai {
+      background: #f3f3f5; border-radius: 16px 16px 16px 4px;
+      padding: 10px 14px; font-size: 13px; line-height: 1.55;
+      max-width: 88%; align-self: flex-start; direction: rtl; text-align: right;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif; color: #263238;
+    }
+    .home-chat .chat-user {
+      background: #263238; color: white; border-radius: 16px 16px 4px 16px;
+      padding: 10px 14px; font-size: 13px; line-height: 1.55;
+      max-width: 88%; align-self: flex-end; direction: rtl; text-align: right;
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+    }
+
     .card-text {
       display: flex;
       flex-direction: column;
@@ -2149,7 +2177,7 @@
   </div>
 
   <!-- Shortcut cards -->
-  <div class="main-btns">
+  <div class="main-btns" id="mainBtns">
     <!-- Row 1 -->
     <div class="btn-row btn-row-top">
       <div class="shortcut-card" id="morningBriefBtn">
@@ -2199,6 +2227,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Home conversation (shown when typing) -->
+  <div class="home-chat" id="homeChat"></div>
 
   <!-- Ask Nexus input bar -->
   <div class="ask-bar-wrapper">
@@ -2737,9 +2768,102 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
   document.getElementById('chatInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); sendTyped(); }
   });
-  // Home screen ask bar
-  document.getElementById('homeInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') { e.preventDefault(); sendFromBar(e.target); }
+  // ── Home screen inline chat ──
+  const mainBtns  = document.getElementById('mainBtns');
+  const homeChat  = document.getElementById('homeChat');
+  const homeInput = document.getElementById('homeInput');
+
+  homeInput.addEventListener('focus', () => {
+    mainBtns.classList.add('hidden');
+    homeChat.classList.add('visible');
+  });
+
+  homeInput.addEventListener('blur', () => {
+    if (!homeInput.value.trim() && !homeChat.children.length) {
+      mainBtns.classList.remove('hidden');
+      homeChat.classList.remove('visible');
+    }
+  });
+
+  homeInput.addEventListener('keydown', async e => {
+    if (e.key !== 'Enter') return;
+    e.preventDefault();
+    const text = homeInput.value.trim();
+    if (!text) return;
+    homeInput.value = '';
+
+    // User bubble
+    const userBubble = document.createElement('div');
+    userBubble.className = 'chat-user';
+    userBubble.textContent = text;
+    homeChat.appendChild(userBubble);
+    homeChat.scrollTop = homeChat.scrollHeight;
+
+    conversationHistory.push({ role: 'user', content: text });
+
+    // Typing indicator
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'chat-ai chat-typing';
+    aiBubble.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+    homeChat.appendChild(aiBubble);
+    homeChat.scrollTop = homeChat.scrollHeight;
+
+    if (apiKey) {
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 400,
+            system: SYSTEM_PROMPT,
+            messages: conversationHistory,
+            stream: true
+          })
+        });
+        if (response.ok) {
+          aiBubble.className = 'chat-ai'; aiBubble.textContent = '';
+          let fullText = '';
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            for (const line of decoder.decode(value, { stream: true }).split('\n')) {
+              if (!line.startsWith('data: ')) continue;
+              try {
+                const p = JSON.parse(line.slice(6));
+                if (p.type === 'content_block_delta' && p.delta?.text) {
+                  fullText += p.delta.text; aiBubble.textContent = fullText;
+                  homeChat.scrollTop = homeChat.scrollHeight;
+                }
+              } catch(e) {}
+            }
+          }
+          conversationHistory.push({ role: 'assistant', content: fullText });
+          return;
+        }
+      } catch(err) {}
+    }
+
+    // Demo fallback
+    const reply = getDemoResponse(text);
+    await new Promise(r => setTimeout(r, 700));
+    aiBubble.className = 'chat-ai'; aiBubble.textContent = '';
+    let i = 0;
+    const iv = setInterval(() => {
+      aiBubble.textContent += reply[i++];
+      homeChat.scrollTop = homeChat.scrollHeight;
+      if (i >= reply.length) {
+        clearInterval(iv);
+        conversationHistory.push({ role: 'assistant', content: reply });
+      }
+    }, 18);
   });
   // Morning brief ask bar
   document.getElementById('mbInput').addEventListener('keydown', e => {
