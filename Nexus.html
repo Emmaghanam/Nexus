@@ -11,12 +11,36 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #1a1a2e;
+      background:
+        radial-gradient(
+          circle at 50% 40%,
+          #f6d1c1 0%,
+          #f3c3b5 20%,
+          #efb6a9 35%,
+          #e9a7a0 50%,
+          #e3a1b2 65%,
+          #e7cfc1 80%,
+          #efe2d6 100%
+        ),
+        linear-gradient(
+          180deg,
+          #f3e4d7 0%,
+          #ecd7c8 100%
+        );
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, #f3b6a8, #eaa6a0, #e6b8c5, #f1dfd2);
+      filter: blur(80px);
+      z-index: -1;
     }
 
     /* ── Phone shell ── */
@@ -36,7 +60,18 @@
     /* ── Responsive: fill viewport on real mobile ── */
     @media (max-width: 430px), (max-height: 870px) and (max-width: 430px) {
       body {
-        background: #F7F7F8;
+        background:
+          radial-gradient(
+            circle at 50% 40%,
+            #f6d1c1 0%,
+            #f3c3b5 20%,
+            #efb6a9 35%,
+            #e9a7a0 50%,
+            #e3a1b2 65%,
+            #e7cfc1 80%,
+            #efe2d6 100%
+          ),
+          linear-gradient(180deg, #f3e4d7 0%, #ecd7c8 100%);
         align-items: flex-start;
         min-height: 100dvh;
       }
