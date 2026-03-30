@@ -2494,24 +2494,34 @@
     if (e.target === apiModalOverlay) apiModalOverlay.classList.remove('open');
   });
 
+  // ── Smart demo responses (works without API key) ──
+  function getDemoResponse(text) {
+    const t = text.toLowerCase();
+    if (/ميزانية|مبلغ|قيمة|درهم|مال|تكلفة/.test(t))
+      return 'قيمة العقد ٢٤٠ مليون درهم، مقسّمة على ثلاث دفعات. الدفعتان الأولى والثانية سُدِّدتا بنجاح. الدفعة الثالثة معلّقة حالياً بسبب عدم استلام التحديث الرسمي من المسؤول.';
+    if (/أحمد|الحوسني|مسؤول|مدير مشاريع|من هو/.test(t))
+      return 'المسؤول عن العقد هو أحمد الحوسني، مدير مشاريع البنية التحتية في وزارة الطاقة والبنية التحتية. لم يرفع أي تحديث منذ ٣ أيام من تاريخ الاستحقاق.';
+    if (/تصعيد|رفع|تقرير|مسؤول أعلى|إدارة عليا/.test(t))
+      return 'أنصح بتصعيد الأمر فوراً. يمكنني إعداد تقرير للإدارة العليا يتضمن: تأخر الدفعة الثالثة، غياب التواصل منذ ٣ أيام، والأثر المتوقع على الجدول الزمني الكلي للمشروع.';
+    if (/موعد|تاريخ|مدة|وقت|متأخر|تأخير/.test(t))
+      return 'الموعد النهائي للمرحلة الحالية كان ١٥ مارس ٢٠٢٦ — متأخر الآن يومان. إذا لم يُستلم تحديث خلال ٢٤ ساعة، ينبغي تفعيل خطة الطوارئ وتعديل الجدول الزمني.';
+    if (/حالة|تقدم|وضع|إنجاز|مرحلة/.test(t))
+      return 'العقد في مرحلة الدفعة الثالثة المعلّقة. مستوى المخاطرة: مرتفع. التأخير الحالي يُهدد الجدول الزمني للمشروع الأشمل إذا لم يُعالَج خلال ٤٨ ساعة.';
+    if (/تذكير|إشعار|أرسل|اتصل|راسل|أبلغ/.test(t))
+      return 'تم إرسال تذكير عاجل لأحمد الحوسني باسمك — ٦:٢٥ ص. يُنتظر الرد خلال ساعة. سيتم إعلامك فور الاستجابة.';
+    if (/بنية تحتية|مشروع|عقد|البنية/.test(t))
+      return 'عقد مراجعة البنية التحتية بقيمة ٢٤٠ مليون درهم مع وزارة الطاقة. يشمل المشروع تطوير شبكة البنية التحتية في المنطقة الجنوبية. المرحلة الحالية: الدفعة الثالثة والأخيرة.';
+    if (/مرحبا|أهلا|صباح|مساء|كيف حال|كيف|ما هو/.test(t))
+      return 'مرحباً! أنا نيكسس، مساعدك الذكي لإدارة المشاريع الحكومية. يمكنني مساعدتك في متابعة العقد، التصعيد، إرسال التذكيرات، وتحليل المخاطر. كيف يمكنني خدمتك؟';
+    if (/خطوة|ماذا أفعل|توصية|اقتراح|نصيحة/.test(t))
+      return 'التوصية الفورية: ١) أرسل تذكيراً عاجلاً لأحمد الحوسني. ٢) إذا لم يردّ خلال ساعتين، صعّد الأمر لمديره المباشر. ٣) أعدّ تقرير تأخير رسمياً لحماية مصالح المشروع.';
+    return 'بناءً على سياق العقد الحالي، الأولوية القصوى هي الحصول على تحديث من أحمد الحوسني خلال ٢٤ ساعة. يمكنني مساعدتك في إرسال تذكير، إعداد تقرير، أو رفع الأمر للإدارة العليا.';
+  }
+
   async function sendTyped() {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
     if (!text) return;
-
-    if (!apiKey) {
-      document.getElementById('apiKeyInput').value = '';
-      apiModalOverlay.classList.add('open');
-      // also surface a chat hint if not already there
-      if (!document.getElementById('apiHintMsg')) {
-        const hint = document.createElement('div');
-        hint.className = 'chat-ai'; hint.id = 'apiHintMsg';
-        hint.textContent = 'أدخل مفتاح Anthropic API عبر أيقونة 🔑 في الأعلى لتفعيل الردود.';
-        chatMessages.appendChild(hint); scrollChat();
-      }
-      return;
-    }
-
     input.value = '';
 
     // User bubble
@@ -2530,61 +2540,74 @@
     chatMessages.appendChild(aiBubble);
     scrollChat();
 
-    try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 400,
-          system: SYSTEM_PROMPT,
-          messages: conversationHistory,
-          stream: true
-        })
-      });
+    // Use real API if key is set, otherwise smart demo mode
+    if (apiKey) {
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-access': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: 400,
+            system: SYSTEM_PROMPT,
+            messages: conversationHistory,
+            stream: true
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-      aiBubble.className = 'chat-ai';
-      aiBubble.textContent = '';
-      let fullText = '';
+        aiBubble.className = 'chat-ai';
+        aiBubble.textContent = '';
+        let fullText = '';
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        for (const line of chunk.split('\n')) {
-          if (!line.startsWith('data: ')) continue;
-          const data = line.slice(6).trim();
-          if (data === '[DONE]') break;
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-              fullText += parsed.delta.text;
-              aiBubble.textContent = fullText;
-              scrollChat();
-            }
-          } catch(e) {}
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          for (const line of chunk.split('\n')) {
+            if (!line.startsWith('data: ')) continue;
+            const data = line.slice(6).trim();
+            if (data === '[DONE]') break;
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+                fullText += parsed.delta.text;
+                aiBubble.textContent = fullText;
+                scrollChat();
+              }
+            } catch(e) {}
+          }
         }
+        conversationHistory.push({ role: 'assistant', content: fullText });
+        return;
+      } catch(err) {
+        console.error('API error:', err);
+        // fall through to demo mode on error
       }
-
-      conversationHistory.push({ role: 'assistant', content: fullText });
-
-    } catch(err) {
-      aiBubble.className = 'chat-ai';
-      aiBubble.textContent = 'حدث خطأ في الاتصال. تحقق من مفتاح API والاتصال بالإنترنت.';
-      console.error('AI error:', err);
     }
+
+    // Demo mode: simulate typing then show smart response
+    const reply = getDemoResponse(text);
+    await new Promise(r => setTimeout(r, 800));
+    aiBubble.className = 'chat-ai';
+    aiBubble.textContent = '';
+    let i = 0;
+    const interval = setInterval(() => {
+      aiBubble.textContent += reply[i++];
+      scrollChat();
+      if (i >= reply.length) {
+        clearInterval(interval);
+        conversationHistory.push({ role: 'assistant', content: reply });
+      }
+    }, 18);
   }
 
   // Register send listeners after sendTyped is defined
