@@ -2521,16 +2521,22 @@
 
   // Send typed message — listeners registered after sendTyped is defined below
   // ── AI Integration ──
-  const SYSTEM_PROMPT = `أنت نيكسس، مساعد ذكاء اصطناعي متخصص في إدارة المشاريع الحكومية. تعمل لدى م. خالد المنصوري، مدير عام الشؤون الاستراتيجية في أبوظبي.
+  const SYSTEM_PROMPT = `You are Nexus (نيكسس), an AI-powered task management assistant built exclusively for senior government officials. You serve as an intelligent chief-of-staff, helping executives stay on top of high-priority tasks, contracts, escalations, and team accountability.
 
-السياق الحالي:
-- مراجعة عقد البنية التحتية بقيمة ٢٤٠ مليون درهم
-- المسؤول: أحمد الحوسني، مدير مشاريع البنية التحتية، وزارة الطاقة والبنية التحتية
-- الموعد النهائي: ١٥ مارس ٢٠٢٦ (متأخر يومان)
-- آخر تحديث: منذ ٣ أيام — لم يُرفع أي تحديث
-- المرحلة: الدفعة الثالثة المعلّقة
+You are currently assisting: م. خالد المنصوري (Khalid Al Mansouri), Director General of Strategic Affairs, Abu Dhabi.
 
-أجب دائماً باللغة العربية بأسلوب مهني ومختصر. قدّم توصيات عملية وقابلة للتنفيذ فقط. لا تتجاوز ٣ أسطر في الرد.`;
+Active context:
+- Contract under review: Infrastructure Development Contract — AED 240 million
+- Responsible officer: Ahmed Al-Housni, Infrastructure Projects Manager, Ministry of Energy & Infrastructure
+- Deadline: 15 March 2026 (2 days overdue)
+- Last update received: 3 days ago — no update submitted
+- Current stage: Third and final payment tranche — pending
+
+Your capabilities include: tracking tasks, drafting escalation reports, sending reminders, risk analysis, summarizing briefs, and recommending next actions.
+
+CRITICAL LANGUAGE RULE: Detect the language of the user's message and ALWAYS respond in the exact same language. If the user writes in Arabic → respond in Arabic. If the user writes in English → respond in English. Never mix languages in a single response.
+
+Keep responses concise (3 lines max), professional, and action-oriented. You are speaking to a very senior official — be direct, no fluff.`;
 
   let conversationHistory = [];
   let apiKey = localStorage.getItem('nexus_api_key') || '';
@@ -2550,28 +2556,66 @@
     if (e.target === apiModalOverlay) apiModalOverlay.classList.remove('open');
   });
 
-  // ── Smart demo responses (works without API key) ──
+  // ── Language detection ──
+  function isArabic(text) { return /[\u0600-\u06FF]/.test(text); }
+
+  // ── Smart demo responses — bilingual ──
   function getDemoResponse(text) {
     const t = text.toLowerCase();
-    if (/ميزانية|مبلغ|قيمة|درهم|مال|تكلفة/.test(t))
-      return 'قيمة العقد ٢٤٠ مليون درهم، مقسّمة على ثلاث دفعات. الدفعتان الأولى والثانية سُدِّدتا بنجاح. الدفعة الثالثة معلّقة حالياً بسبب عدم استلام التحديث الرسمي من المسؤول.';
-    if (/أحمد|الحوسني|مسؤول|مدير مشاريع|من هو/.test(t))
-      return 'المسؤول عن العقد هو أحمد الحوسني، مدير مشاريع البنية التحتية في وزارة الطاقة والبنية التحتية. لم يرفع أي تحديث منذ ٣ أيام من تاريخ الاستحقاق.';
-    if (/تصعيد|رفع|تقرير|مسؤول أعلى|إدارة عليا/.test(t))
-      return 'أنصح بتصعيد الأمر فوراً. يمكنني إعداد تقرير للإدارة العليا يتضمن: تأخر الدفعة الثالثة، غياب التواصل منذ ٣ أيام، والأثر المتوقع على الجدول الزمني الكلي للمشروع.';
-    if (/موعد|تاريخ|مدة|وقت|متأخر|تأخير/.test(t))
-      return 'الموعد النهائي للمرحلة الحالية كان ١٥ مارس ٢٠٢٦ — متأخر الآن يومان. إذا لم يُستلم تحديث خلال ٢٤ ساعة، ينبغي تفعيل خطة الطوارئ وتعديل الجدول الزمني.';
-    if (/حالة|تقدم|وضع|إنجاز|مرحلة/.test(t))
-      return 'العقد في مرحلة الدفعة الثالثة المعلّقة. مستوى المخاطرة: مرتفع. التأخير الحالي يُهدد الجدول الزمني للمشروع الأشمل إذا لم يُعالَج خلال ٤٨ ساعة.';
-    if (/تذكير|إشعار|أرسل|اتصل|راسل|أبلغ/.test(t))
-      return 'تم إرسال تذكير عاجل لأحمد الحوسني باسمك — ٦:٢٥ ص. يُنتظر الرد خلال ساعة. سيتم إعلامك فور الاستجابة.';
-    if (/بنية تحتية|مشروع|عقد|البنية/.test(t))
-      return 'عقد مراجعة البنية التحتية بقيمة ٢٤٠ مليون درهم مع وزارة الطاقة. يشمل المشروع تطوير شبكة البنية التحتية في المنطقة الجنوبية. المرحلة الحالية: الدفعة الثالثة والأخيرة.';
-    if (/مرحبا|أهلا|صباح|مساء|كيف حال|كيف|ما هو/.test(t))
-      return 'مرحباً! أنا نيكسس، مساعدك الذكي لإدارة المشاريع الحكومية. يمكنني مساعدتك في متابعة العقد، التصعيد، إرسال التذكيرات، وتحليل المخاطر. كيف يمكنني خدمتك؟';
-    if (/خطوة|ماذا أفعل|توصية|اقتراح|نصيحة/.test(t))
-      return 'التوصية الفورية: ١) أرسل تذكيراً عاجلاً لأحمد الحوسني. ٢) إذا لم يردّ خلال ساعتين، صعّد الأمر لمديره المباشر. ٣) أعدّ تقرير تأخير رسمياً لحماية مصالح المشروع.';
-    return 'بناءً على سياق العقد الحالي، الأولوية القصوى هي الحصول على تحديث من أحمد الحوسني خلال ٢٤ ساعة. يمكنني مساعدتك في إرسال تذكير، إعداد تقرير، أو رفع الأمر للإدارة العليا.';
+    const ar = isArabic(text);
+
+    // Budget / value
+    if (/ميزانية|مبلغ|قيمة|درهم|مال|تكلفة/.test(t) || /budget|cost|value|amount|million|dirham/.test(t))
+      return ar
+        ? 'قيمة العقد ٢٤٠ مليون درهم، مقسّمة على ثلاث دفعات. الدفعتان الأولى والثانية سُدِّدتا. الدفعة الثالثة معلّقة بسبب غياب التحديث الرسمي.'
+        : 'Contract value is AED 240M across 3 payment tranches. Tranches 1 & 2 paid successfully. Tranche 3 is on hold pending an official update from the assigned officer.';
+
+    // Responsible person
+    if (/أحمد|الحوسني|مسؤول|مدير مشاريع|من هو/.test(t) || /ahmed|housni|responsible|who is|officer|manager/.test(t))
+      return ar
+        ? 'المسؤول هو أحمد الحوسني، مدير مشاريع البنية التحتية — وزارة الطاقة والبنية التحتية. لم يرفع أي تحديث منذ ٣ أيام من تاريخ الاستحقاق.'
+        : 'Ahmed Al-Housni — Infrastructure Projects Manager, Ministry of Energy & Infrastructure. No update submitted in the last 3 days past the deadline.';
+
+    // Escalation
+    if (/تصعيد|رفع|تقرير|إدارة عليا/.test(t) || /escalat|report|senior|urgent|raise/.test(t))
+      return ar
+        ? 'يُنصح بالتصعيد الفوري. سأعدّ تقريراً للإدارة العليا يشمل: تأخر الدفعة الثالثة، غياب التواصل ٣ أيام، والأثر المتوقع على الجدول الزمني.'
+        : 'Immediate escalation recommended. I can draft a report for senior leadership covering: delayed tranche 3, 3-day communication gap, and projected timeline impact.';
+
+    // Deadline / delay
+    if (/موعد|تاريخ|متأخر|تأخير/.test(t) || /deadline|late|delay|overdue|date|when/.test(t))
+      return ar
+        ? 'الموعد النهائي كان ١٥ مارس ٢٠٢٦ — متأخر الآن يومان. إذا لم يُستلم تحديث خلال ٢٤ ساعة يجب تفعيل خطة الطوارئ.'
+        : 'Deadline was 15 March 2026 — currently 2 days overdue. If no update is received within 24 hours, the contingency plan must be activated.';
+
+    // Status / progress
+    if (/حالة|تقدم|وضع|مرحلة/.test(t) || /status|progress|stage|update|situation/.test(t))
+      return ar
+        ? 'العقد في مرحلة الدفعة الثالثة المعلّقة. مستوى المخاطرة مرتفع — التأخير يُهدد الجدول الزمني الكلي إذا لم يُعالَج خلال ٤٨ ساعة.'
+        : 'Contract is at the pending 3rd tranche stage. Risk level: HIGH — current delay threatens the master project timeline if not resolved within 48 hours.';
+
+    // Reminder / send
+    if (/تذكير|إشعار|أرسل|راسل/.test(t) || /remind|send|notify|contact|message|alert/.test(t))
+      return ar
+        ? 'تم إرسال تذكير عاجل لأحمد الحوسني باسمك — الآن. يُنتظر الرد خلال ساعة وسيتم إعلامك فور الاستجابة.'
+        : 'Urgent reminder sent to Ahmed Al-Housni on your behalf — now. Response expected within 1 hour. You will be notified immediately upon reply.';
+
+    // Greeting
+    if (/مرحبا|أهلا|صباح|مساء|كيف/.test(t) || /hello|hi|good morning|good evening|hey|how are/.test(t))
+      return ar
+        ? 'مرحباً! أنا نيكسس، مساعدك التنفيذي للمشاريع الحكومية. تتبّع المهام، التصعيد، التقارير، وتحليل المخاطر — كلها بين يديك. كيف يمكنني خدمتك؟'
+        : 'Hello! I\'m Nexus, your AI-powered chief-of-staff for government task management. I handle task tracking, escalations, briefings, and risk analysis. How can I assist?';
+
+    // Recommendation / next steps
+    if (/توصية|اقتراح|نصيحة|خطوة/.test(t) || /recommend|suggest|advice|next step|what should|action/.test(t))
+      return ar
+        ? 'التوصية: ١) أرسل تذكيراً عاجلاً الآن. ٢) إن لم يردّ خلال ساعتين، صعّد لمديره المباشر. ٣) أعدّ تقرير تأخير رسمياً لحماية مصالح المشروع.'
+        : 'Recommended actions: 1) Send an urgent reminder now. 2) If no reply within 2 hours, escalate to his direct manager. 3) File an official delay report to protect project interests.';
+
+    // Default
+    return ar
+      ? 'الأولوية القصوى الآن: الحصول على تحديث من أحمد الحوسني. يمكنني إرسال تذكير، إعداد تقرير تصعيد، أو تحليل أثر التأخير على المشروع — ما الذي تفضّله؟'
+      : 'Top priority right now: obtain an update from Ahmed Al-Housni. I can send a reminder, draft an escalation report, or analyze the delay impact on the project — what would you prefer?';
   }
 
   async function sendTyped() {
@@ -2787,25 +2831,44 @@
         mediaRecorder.start();
       } catch(e) { console.warn('MediaRecorder unavailable:', e); }
 
-      // 2. SpeechRecognition — live Arabic transcription
+      // 2. Dual-language SpeechRecognition (Arabic + English)
+      // Run two recognitions in parallel — whichever produces more text wins
       if (SpeechRecognition) {
-        recognition = new SpeechRecognition();
-        recognition.lang = 'ar-AE';
-        recognition.continuous = true;
-        recognition.interimResults = true;
+        let arTranscript = '', enTranscript = '';
+        let arDone = false, enDone = false;
 
-        recognition.onresult = e => {
-          let interim = '';
-          for (let i = e.resultIndex; i < e.results.length; i++) {
-            if (e.results[i].isFinal) finalTranscript += e.results[i][0].transcript;
-            else interim += e.results[i][0].transcript;
-          }
-          inputEl.value = finalTranscript + interim;
-        };
+        function pickBest() {
+          // Prefer whichever has more content; tie-break: Arabic
+          const winner = enTranscript.length > arTranscript.length ? enTranscript : arTranscript;
+          if (winner) finalTranscript = winner;
+        }
 
-        recognition.onerror = e => console.warn('Speech error:', e.error);
-        recognition.onend   = () => { if (isRecording) stopRecording(); };
-        recognition.start();
+        function makeRec(lang, onFinal) {
+          const rec = new SpeechRecognition();
+          rec.lang = lang;
+          rec.continuous = true;
+          rec.interimResults = true;
+          rec.onresult = e => {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              if (e.results[i].isFinal) onFinal(e.results[i][0].transcript);
+              else interim += e.results[i][0].transcript;
+            }
+            pickBest();
+            inputEl.value = finalTranscript + interim;
+          };
+          rec.onerror = () => {};
+          rec.onend = () => { if (isRecording) stopRecording(); };
+          return rec;
+        }
+
+        const recAr = makeRec('ar-AE', t => { arTranscript += t; });
+        const recEn = makeRec('en-US', t => { enTranscript += t; });
+        recognition = { stop: () => { try{recAr.stop();}catch(e){} try{recEn.stop();}catch(e){} } };
+
+        try { recAr.start(); } catch(e) {}
+        // Stagger English start slightly to avoid browser conflicts
+        setTimeout(() => { try { recEn.start(); } catch(e) {} }, 150);
       }
     }
 
