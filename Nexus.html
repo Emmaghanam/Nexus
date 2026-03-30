@@ -3471,45 +3471,24 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
       voiceTranscriptText = '';
       setListening();
 
-      // Run dual-language recognition (Arabic + English), pick best result
-      let arText = '', enText = '';
-      let recAr, recEn, recDone = false;
-
-      function pickWinner() {
-        return enText.length > arText.length ? enText : arText;
-      }
-
-      function onRecDone() {
-        if (recDone) return;
-        recDone = true;
+      const rec = new SpeechRecog();
+      rec.lang = isArabic(voiceTextInput.value || '') ? 'ar-AE' : 'ar-AE';
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.onresult = e => {
+        let interim = '';
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          if (e.results[i].isFinal) voiceTranscriptText += e.results[i][0].transcript;
+          else interim = e.results[i][0].transcript;
+        }
+        barLabel.textContent = '● ' + (voiceTranscriptText + interim || 'يستمع...');
+      };
+      rec.onerror = () => { setIdle(); };
+      rec.onend = () => {
         voiceRec = null;
-        voiceTranscriptText = pickWinner().trim();
-        if (voiceTranscriptText) sendVoiceText(voiceTranscriptText);
+        if (voiceTranscriptText.trim()) sendVoiceText(voiceTranscriptText.trim());
         else setIdle();
-      }
-
-      function makeVoiceRec(lang, onFinal) {
-        const rec = new SpeechRecog();
-        rec.lang = lang; rec.continuous = false; rec.interimResults = true;
-        rec.onresult = e => {
-          let interim = '';
-          for (let i = e.resultIndex; i < e.results.length; i++) {
-            if (e.results[i].isFinal) onFinal(e.results[i][0].transcript);
-            else interim += e.results[i][0].transcript;
-          }
-          barLabel.textContent = '● ' + (pickWinner() + interim || 'يستمع...');
-        };
-        rec.onerror = () => {};
-        rec.onend = onRecDone;
-        return rec;
-      }
-
-      recAr = makeVoiceRec('ar-AE', t => { arText += t; });
-      recEn = makeVoiceRec('en-US', t => { enText += t; });
-      voiceRec = { stop: () => { try{recAr.stop();}catch(e){} try{recEn.stop();}catch(e){} } };
-
-      try { recAr.start(); } catch(e) {}
-      setTimeout(() => { try { recEn.start(); } catch(e) {} }, 150);
+      };
       rec.start();
       voiceRec = rec;
     });
