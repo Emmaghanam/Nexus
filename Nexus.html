@@ -47,12 +47,12 @@
     .phone {
       width: 393px;
       height: 852px;
-      background: #F7F7F8;
+      background: transparent;
       border-radius: 50px;
       box-shadow:
         0 0 0 12px #111,
         0 0 0 14px #333,
-        0 40px 80px rgba(0,0,0,0.6);
+        0 40px 80px rgba(0,0,0,0.4);
       overflow: hidden;
       position: relative;
     }
@@ -157,9 +157,11 @@
     .nav-history-btn {
       width: 38px;
       height: 38px;
-      background: white;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: 19px;
-      box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.04);
+      box-shadow: 0px 4px 10px 0px rgba(180,100,80,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -178,7 +180,7 @@
       width: 34px;
       height: 34px;
       border-radius: 9999px;
-      box-shadow: 0 0 0 2px white, 1px 1px 5px 0px rgba(0,0,0,0.32);
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.85), 1px 1px 5px 0px rgba(0,0,0,0.2);
       object-fit: cover;
       flex-shrink: 0;
     }
@@ -243,10 +245,12 @@
     .btn-row-top, .btn-row-bottom { gap: 18px; width: 330px; }
 
     .shortcut-card {
-      background: white;
-      border: 1px solid #e2e8f0;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 8px;
-      box-shadow: 0px 7px 14px 0px rgba(0,0,0,0.15);
+      box-shadow: 0px 4px 16px 0px rgba(180,100,80,0.12);
       padding: 8px;
       display: flex;
       align-items: center;
@@ -275,7 +279,7 @@
     }
     .home-chat.visible { opacity: 1; }
     .home-chat .chat-ai {
-      background: #f3f3f5; border-radius: 16px 16px 16px 4px;
+      background: rgba(255,255,255,0.65); border-radius: 16px 16px 16px 4px;
       padding: 10px 14px; font-size: 13px; line-height: 1.55;
       max-width: 88%; align-self: flex-start; direction: rtl; text-align: right;
       font-family: 'Inter','Noto Sans Arabic',sans-serif; color: #263238;
@@ -314,7 +318,7 @@
     .card-icon {
       width: 30px;
       height: 30px;
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.6);
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -345,9 +349,11 @@
     .ask-bar-bg {
       position: absolute;
       inset: 0;
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-radius: 20px;
-      box-shadow: inset 0px 1px 1px 2px white;
+      box-shadow: inset 0px 1px 1px 2px rgba(255,255,255,0.9);
     }
     /* Top label */
     .ask-bar-label {
@@ -368,8 +374,8 @@
       left: 88px;
       right: 11px;
       height: 36px;
-      background: white;
-      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.7);
       border-radius: 20px;
       box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
       display: flex;
@@ -402,8 +408,8 @@
       bottom: 10px;
       width: 36px;
       height: 36px;
-      background: white;
-      border: 1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.7);
       border-radius: 20px;
       box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
       display: flex;
@@ -435,7 +441,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 393px; height: 852px;
-      background: #F7F7F8;
+      background: transparent;
       z-index: 1;
       overflow-y: auto;
       overflow-x: hidden;
@@ -454,7 +460,7 @@
       z-index: 2;
       display: flex;
       flex-direction: column;
-      background: #F7F7F8;
+      background: transparent;
       transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
                   border-radius 0.4s, box-shadow 0.4s;
       will-change: transform;
@@ -495,10 +501,12 @@
     }
     .settings-back {
       width: 32px; height: 32px;
-      background: white;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: none;
       border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(180,100,80,0.1);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -522,8 +530,10 @@
     /* Profile card */
     .profile-card {
       margin: 12px 24px 12px 0;
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 8px;
       display: none;
@@ -563,7 +573,7 @@
     .settings-divider {
       height: 2px;
       margin: 12px 24px;
-      background: linear-gradient(to left, #e2e8f0, transparent);
+      background: linear-gradient(to left, rgba(180,100,80,0.2), transparent);
       flex-shrink: 0;
     }
     .settings-section-header {
@@ -618,8 +628,8 @@
       line-height: normal;
     }
     .settings-badge {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 8px;
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -658,8 +668,8 @@
     }
     .toggle.on .toggle-knob { transform: translateX(20px); }
     .toggle-wrap {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 8px;
       display: flex;
@@ -673,7 +683,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 393px; height: 852px;
-      background: #F7F7F8;
+      background: transparent;
       z-index: 8;
       display: flex;
       flex-direction: column;
@@ -696,10 +706,12 @@
     }
     .chat-messages::-webkit-scrollbar { display: none; }
 
-    /* AI bubble – white card, rounded all except bottom-left */
+    /* AI bubble – frosted, rounded all except bottom-left */
     .chat-ai {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px 16px 16px 0;
       padding: 14px 16px;
       width: 330px;
@@ -753,8 +765,8 @@
       align-self: flex-start;
     }
     .cp-name-pill {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 8px;
       display: flex;
@@ -811,7 +823,7 @@
       letter-spacing: 0.35px;
     }
     .cp-value {
-      background: white;
+      background: rgba(255,255,255,0.65);
       border-radius: 16px;
       padding: 4px 8px;
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -823,7 +835,7 @@
     }
     .cp-value .late { color: #d5343a; }
     .cp-note {
-      background: rgba(238,238,238,0.5);
+      background: rgba(255,255,255,0.4);
       border-radius: 10px;
       padding: 8px 10px;
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -848,8 +860,8 @@
       width: 100%;
     }
     .chat-chip {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 6px 8px;
       display: flex;
@@ -864,13 +876,15 @@
       letter-spacing: 0.35px;
       transition: background 0.15s;
     }
-    .chat-chip:active { background: #f0f0f0; }
+    .chat-chip:active { background: rgba(255,255,255,0.85); }
     .chat-chip.used { opacity: 0.4; pointer-events: none; }
 
     /* Escalation options card */
     .chat-options-card {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 18px;
       width: 236px;
       padding: 16px 8px 8px;
@@ -889,8 +903,8 @@
       padding: 0 4px 4px;
     }
     .chat-option-row {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.75);
       border-radius: 16px;
       padding: 8px;
       display: flex;
@@ -901,7 +915,7 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .chat-option-row:active, .chat-option-row:hover { background: #f7f7f8; }
+    .chat-option-row:active, .chat-option-row:hover { background: rgba(255,255,255,0.82); }
     .chat-option-row.used { opacity: 0.4; pointer-events: none; }
     .chat-option-texts {
       display: flex;
@@ -957,7 +971,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 393px; height: 852px;
-      background: #F7F7F8;
+      background: transparent;
       z-index: 6;
       display: flex;
       flex-direction: column;
@@ -983,7 +997,9 @@
     /* Morning brief main card */
     .mb-card {
       margin: 0 16px 0 24px;
-      background: white;
+      background: rgba(255,255,255,0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 16px;
       overflow: hidden;
       flex-shrink: 0;
@@ -995,7 +1011,7 @@
       gap: 4px;
       padding: 0 16px;
       height: 50px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid rgba(180,100,80,0.12);
       direction: rtl;
     }
     .mb-card-title {
@@ -1014,7 +1030,7 @@
     }
     .mb-icon {
       width: 32px; height: 32px;
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.5);
       border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
@@ -1038,7 +1054,7 @@
       width: 90%;
     }
     .mb-counter-badge {
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.5);
       border-radius: 16px;
       padding: 0 8px;
       height: 18px;
@@ -1078,7 +1094,7 @@
     .mb-priority-label.high     { color: #b7791f; }
     .mb-priority-label.medium   { color: #d28a23; }
     .mb-priority-count {
-      background: white;
+      background: rgba(255,255,255,0.7);
       border-radius: 60px;
       width: 16px; height: 16px;
       display: flex; align-items: center; justify-content: center;
@@ -1092,8 +1108,8 @@
 
     /* Task card row */
     .mb-task-card {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.75);
       height: 70px;
       position: relative;
       display: flex;
@@ -1102,7 +1118,7 @@
       direction: rtl;
       gap: 8px;
     }
-    .mb-task-card:not(:last-child) { border-bottom: 1px solid #eee; border-top: none; }
+    .mb-task-card:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.6); border-top: none; }
     .mb-task-card:last-child { border-radius: 0 0 8px 8px; }
 
     /* Urgency bar on physical left edge */
@@ -1175,8 +1191,8 @@
     .mb-progress-circle {
       width: 16px; height: 16px;
       border-radius: 50%;
-      border: 1px solid #a0a0a0;
-      background: #F7F7F8;
+      border: 1px solid rgba(180,100,80,0.3);
+      background: rgba(255,255,255,0.5);
     }
     .mb-progress-text {
       flex: 1;
@@ -1214,8 +1230,8 @@
     }
     .mb-options::-webkit-scrollbar { display: none; }
     .mb-chip {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 6px 8px;
       display: flex;
@@ -1249,7 +1265,9 @@
       bottom: 0; left: 0;
       width: 393px;
       height: 788px;
-      background: white;
+      background: rgba(253,242,237,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-radius: 38px 38px 0 0;
       box-shadow: 0px 15px 75px 0px rgba(0,0,0,0.18);
       z-index: 11;
@@ -1271,7 +1289,7 @@
     }
     .sheet-grabber {
       width: 36px; height: 5px;
-      background: #ccc;
+      background: rgba(180,100,80,0.25);
       border-radius: 100px;
     }
 
@@ -1321,11 +1339,11 @@
       font-weight: 600;
     }
     .sheet-badge.priority { background: #fdecea; color: #8b1515; }
-    .sheet-badge.delay    { background: #F7F7F8; color: #263238; }
+    .sheet-badge.delay    { background: rgba(255,255,255,0.55); color: #263238; }
 
     /* Assignee card */
     .sheet-card {
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.5);
       border-radius: 16px;
       padding: 14px;
       display: flex;
@@ -1341,7 +1359,7 @@
     .sheet-card-icon {
       width: 28px; height: 28px;
       border-radius: 50%;
-      background: #e0e0e0;
+      background: rgba(220,180,160,0.4);
       overflow: hidden;
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
@@ -1375,7 +1393,7 @@
       gap: 6px;
       direction: rtl;
       padding-top: 4px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid rgba(180,100,80,0.15);
     }
     .sheet-due-label {
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -1392,7 +1410,7 @@
 
     /* AI context card */
     .sheet-ai-card {
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.5);
       border-radius: 16px;
       padding: 14px;
       display: flex;
@@ -1422,7 +1440,7 @@
 
     /* Timeline card */
     .sheet-timeline-card {
-      background: #F7F7F8;
+      background: rgba(255,255,255,0.5);
       border-radius: 16px;
       padding: 14px;
       display: flex;
@@ -1498,8 +1516,8 @@
       text-align: right;
     }
     .sheet-question-chip {
-      background: white;
-      border: 1px solid #eee;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.8);
       border-radius: 16px;
       padding: 8px 12px;
       font-family: 'Inter','Noto Sans Arabic',sans-serif;
@@ -1518,7 +1536,7 @@
     .agent-status-bar {
       display: flex; align-items: center; justify-content: center;
       gap: 6px; padding: 5px 0 4px;
-      background: #fafafa; border-bottom: 1px solid #f0f0f0;
+      background: rgba(255,255,255,0.35); border-bottom: 1px solid rgba(255,255,255,0.5);
       direction: rtl;
     }
     .agent-status-dot {
@@ -1561,7 +1579,7 @@
     /* Voice message bubble */
     .voice-bubble {
       display: flex; align-items: center; gap: 8px;
-      background: #f0f0f0; border-radius: 16px 16px 4px 16px;
+      background: rgba(255,255,255,0.6); border-radius: 16px 16px 4px 16px;
       padding: 8px 12px; max-width: 80%;
       align-self: flex-end; margin: 4px 0;
       direction: rtl;
@@ -1593,7 +1611,7 @@
     }
     .api-modal-overlay.open { display: flex; }
     .api-modal {
-      background: white; border-radius: 20px; padding: 24px 20px;
+      background: rgba(253,242,237,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 20px; padding: 24px 20px;
       width: 320px; direction: rtl; text-align: right;
       box-shadow: 0 20px 60px rgba(0,0,0,0.25);
     }
@@ -1629,7 +1647,7 @@
     .screen-voice {
       position: absolute;
       inset: 0;
-      background: #f7f7f8;
+      background: transparent;
       z-index: 25;
       display: flex;
       flex-direction: column;
@@ -1669,7 +1687,7 @@
       border-radius: 16px 16px 4px 16px; align-self: flex-end;
     }
     .voice-msg-ai {
-      background: #f0f0f0; color: #263238;
+      background: rgba(255,255,255,0.65); color: #263238;
       border-radius: 16px 16px 16px 4px; align-self: flex-start;
     }
 
