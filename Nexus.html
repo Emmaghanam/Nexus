@@ -1435,6 +1435,30 @@
       direction: rtl;
     }
 
+    /* ── Agent status bar ── */
+    .agent-status-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 5px 0 4px;
+      background: #fafafa; border-bottom: 1px solid #f0f0f0;
+      direction: rtl;
+    }
+    .agent-status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #27ae60; flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .agent-status-dot.busy {
+      background: #f39c12;
+      animation: statusPulse 0.9s infinite;
+    }
+    @keyframes statusPulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    .agent-status-text {
+      font-family: 'Inter','Noto Sans Arabic',sans-serif;
+      font-size: 11px; font-weight: 500; color: #78777c;
+    }
+
     /* ── Typing indicator ── */
     .chat-typing { display: flex; align-items: center; gap: 5px; padding: 12px 14px; }
     .typing-dot {
@@ -1803,6 +1827,11 @@
         </button>
         <img class="nav-avatar" src="https://www.figma.com/api/mcp/asset/d711d2ee-fa85-4363-bbd1-807401c1dec4" alt="user avatar" />
       </div>
+    </div>
+    <!-- Agent status bar -->
+    <div class="agent-status-bar" id="agentStatusBar">
+      <span class="agent-status-dot" id="agentStatusDot"></span>
+      <span class="agent-status-text" id="agentStatusText">نيكسس متاح</span>
     </div>
 
     <!-- Chat messages area -->
@@ -2526,6 +2555,12 @@
 
     conversationHistory.push({ role: 'user', content: text });
 
+    // Set agent status → busy
+    const statusDot = document.getElementById('agentStatusDot');
+    const statusText = document.getElementById('agentStatusText');
+    statusDot.classList.add('busy');
+    statusText.textContent = 'نيكسس يعالج...';
+
     // Typing indicator
     const aiBubble = document.createElement('div');
     aiBubble.className = 'chat-ai chat-typing';
@@ -2580,6 +2615,7 @@
           }
         }
         conversationHistory.push({ role: 'assistant', content: fullText });
+        statusDot.classList.remove('busy'); statusText.textContent = 'نيكسس متاح';
         return;
       } catch(err) {
         console.error('API error:', err);
@@ -2599,6 +2635,7 @@
       if (i >= reply.length) {
         clearInterval(interval);
         conversationHistory.push({ role: 'assistant', content: reply });
+        statusDot.classList.remove('busy'); statusText.textContent = 'نيكسس متاح';
       }
     }, 18);
   }
