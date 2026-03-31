@@ -292,6 +292,8 @@
     .shortcut-card:active { transform: scale(0.97); }
     .shortcut-card.card-wide         { width: 179px; }
     .shortcut-card.card-bottom-wide  { width: 176px; }
+    .shortcut-card.card-morning      { width: 156px; height: 79px; }
+    .shortcut-card.card-overdue      { width: 156px; height: 75px; }
 
     /* ── Home chat mode ── */
     #mainBtns {
@@ -403,32 +405,39 @@
       border-radius: 20px;
       box-shadow: inset 0px 1px 1px 2px rgba(255,255,255,0.9);
     }
-    /* Top label */
+    /* Placeholder label inside the bar */
     .ask-bar-label {
       position: absolute;
-      top: 8px;
-      right: 18px;
+      bottom: 10px;
+      left: 84px;
+      right: 48px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
       font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
       font-size: 12px;
       font-weight: 500;
-      color: #262626;
+      color: #a0a0a0;
       line-height: 20px;
       direction: rtl;
+      padding: 0 10px;
+      pointer-events: none;
     }
-    /* Input field area (lower right) */
+    /* Input field area */
     .ask-bar-input {
       position: absolute;
       bottom: 10px;
-      left: 88px;
-      right: 11px;
+      left: 84px;
+      right: 48px;
       height: 36px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 20px;
       box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
       display: flex;
       align-items: center;
-      padding: 0 36px 0 8px;
+      padding: 0 12px;
       direction: rtl;
       font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
       font-size: 12px;
@@ -436,19 +445,7 @@
       outline: none;
     }
     .ask-bar-input::placeholder {
-      color: #6b6b6b;
-    }
-    /* Add (+) icon inside input */
-    .ask-bar-add-icon {
-      position: absolute;
-      bottom: 10px;
-      right: 11px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+      color: transparent;
     }
     /* Mic button */
     .ask-bar-btn {
@@ -456,8 +453,8 @@
       bottom: 10px;
       width: 36px;
       height: 36px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.08);
       border-radius: 20px;
       box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.04);
       display: flex;
@@ -465,8 +462,9 @@
       justify-content: center;
       cursor: pointer;
     }
-    .ask-bar-mic   { left: 8px; }
-    .ask-bar-voice { left: 48px; }
+    .ask-bar-mic   { left: 5px; }
+    .ask-bar-voice { left: 44px; }
+    .ask-bar-add   { right: 7px; }
 
     /* ── Home indicator ── */
     .home-indicator {
@@ -2413,9 +2411,9 @@
   <div class="status-bar">
     <span class="clock" id="clock">9:41</span>
     <div class="status-icons">
-      <img src="https://www.figma.com/api/mcp/asset/13b86271-2a6c-4f86-b837-e63b4a60a265" alt="signal" />
-      <img src="https://www.figma.com/api/mcp/asset/bcc6e612-0f2b-41b1-8308-75a6dc6ecf16" alt="wifi" />
-      <img src="https://www.figma.com/api/mcp/asset/798f5640-3d8b-45d2-bc7e-976cb823072e" alt="battery" class="battery" />
+      <img src="https://www.figma.com/api/mcp/asset/55d6e223-0108-4423-bf04-45e9f7130cd6" alt="signal" />
+      <img src="https://www.figma.com/api/mcp/asset/496126e0-ac3c-4855-9033-9cbe51a1e2ce" alt="wifi" />
+      <img src="https://www.figma.com/api/mcp/asset/3fce2f12-1040-4095-8977-f23e785fe7af" alt="battery" class="battery" />
     </div>
   </div>
 
@@ -2430,7 +2428,7 @@
     </button>
     <span class="nav-title">نيكسس</span>
     <img class="nav-avatar"
-      src="https://www.figma.com/api/mcp/asset/9438a834-50e5-4cc9-80d0-366d4fe6ded9"
+      src="https://www.figma.com/api/mcp/asset/e5c3dc00-01de-4647-a02b-1f8392be37e8"
       alt="user avatar" />
   </div>
 
@@ -2438,18 +2436,9 @@
   <div class="logo-area">
     <div class="nexus-symbol">
       <!-- Chat bubble icon from Figma -->
-      <img class="nexus-symbol-bubble" src="https://www.figma.com/api/mcp/asset/0cbf40b3-1942-4717-bb2d-c90c90158f61" alt="" />
-      <!-- Gradient sparkle star -->
-      <svg class="nexus-symbol-star" viewBox="20 6 65 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="starGrad" x1="20" y1="6" x2="85" y2="72" gradientUnits="userSpaceOnUse">
-            <stop offset="0%"   stop-color="#38BDF8"/>
-            <stop offset="45%"  stop-color="#6366F1"/>
-            <stop offset="100%" stop-color="#A855F7"/>
-          </linearGradient>
-        </defs>
-        <path d="M56.8197 9.21094C57.2208 9.21094 57.5671 9.34766 57.8588 9.62109C58.1505 9.8763 58.3236 10.2135 58.3783 10.6328C58.8341 14.0964 59.3354 17.0221 59.8822 19.4102C60.4473 21.7799 61.1856 23.7396 62.0971 25.2891C63.0268 26.8203 64.2481 28.0508 65.7611 28.9805C67.2742 29.8919 69.1973 30.612 71.5307 31.1406C73.8822 31.6693 76.7716 32.125 80.1986 32.5078C80.6361 32.5443 80.9916 32.7083 81.2651 33C81.5385 33.2917 81.6752 33.638 81.6752 34.0391C81.6752 34.4583 81.5385 34.8138 81.2651 35.1055C80.9916 35.3971 80.6361 35.5703 80.1986 35.625C76.7716 35.9896 73.8822 36.4362 71.5307 36.9648C69.1973 37.4935 67.2742 38.2227 65.7611 39.1523C64.2481 40.0638 63.0268 41.2943 62.0971 42.8438C61.1856 44.375 60.4473 46.3346 59.8822 48.7227C59.3354 51.0924 58.8341 54 58.3783 57.4453C58.3236 57.8828 58.1505 58.2292 57.8588 58.4844C57.5671 58.7578 57.2208 58.8945 56.8197 58.8945C56.4187 58.8945 56.0723 58.7578 55.7807 58.4844C55.5072 58.2292 55.3432 57.8828 55.2885 57.4453C54.8328 54 54.3223 51.0924 53.7572 48.7227C53.2104 46.3346 52.4721 44.375 51.5424 42.8438C50.6309 41.2943 49.4187 40.0638 47.9057 39.1523C46.3927 38.2227 44.4604 37.4935 42.1088 36.9648C39.7755 36.4362 36.8953 35.9896 33.4682 35.625C33.0307 35.5703 32.6661 35.3971 32.3744 35.1055C32.101 34.8138 31.9643 34.4583 31.9643 34.0391C31.9643 33.638 32.101 33.2917 32.3744 33C32.6661 32.7083 33.0307 32.5443 33.4682 32.5078C36.877 32.0521 39.7481 31.5508 42.0815 31.0039C44.4148 30.4388 46.3289 29.7005 47.8236 28.7891C49.3367 27.8776 50.5489 26.6654 51.4604 25.1523C52.3901 23.6393 53.1374 21.707 53.7026 19.3555C54.2859 17.0039 54.8145 14.0964 55.2885 10.6328C55.3432 10.2135 55.5072 9.8763 55.7807 9.62109C56.0723 9.34766 56.4187 9.21094 56.8197 9.21094ZM35.4369 44.1562C35.7286 44.1562 35.9656 44.2474 36.1479 44.4297C36.3484 44.5938 36.4669 44.8216 36.5033 45.1133C36.7768 47.2279 37.0593 48.8776 37.351 50.0625C37.6427 51.2292 38.0984 52.1133 38.7182 52.7148C39.338 53.3164 40.2677 53.7812 41.5072 54.1094C42.7468 54.4375 44.4513 54.8112 46.6205 55.2305C46.894 55.2669 47.1218 55.3763 47.3041 55.5586C47.4864 55.7409 47.5776 55.987 47.5776 56.2969C47.5776 56.5885 47.4864 56.8255 47.3041 57.0078C47.1218 57.1901 46.894 57.2995 46.6205 57.3359C44.4513 57.6458 42.7468 57.9466 41.5072 58.2383C40.2677 58.5482 39.338 59.013 38.7182 59.6328C38.0984 60.2526 37.6427 61.1641 37.351 62.3672C37.0593 63.5885 36.7768 65.2656 36.5033 67.3984C36.4304 68.0729 36.0749 68.4102 35.4369 68.4102C35.127 68.4102 34.8718 68.319 34.6713 68.1367C34.489 67.9544 34.3888 67.6992 34.3705 67.3711C34.1518 65.694 33.933 64.3177 33.7143 63.2422C33.5138 62.1667 33.2221 61.3099 32.8393 60.6719C32.4565 60.0339 31.9187 59.5326 31.226 59.168C30.5515 58.8034 29.6492 58.4844 28.519 58.2109C27.3888 57.9557 25.9578 57.6641 24.226 57.3359C23.588 57.2266 23.269 56.8802 23.269 56.2969C23.269 55.6771 23.6335 55.3216 24.3627 55.2305C26.0763 54.9388 27.489 54.6745 28.601 54.4375C29.713 54.2005 30.6062 53.8997 31.2807 53.5352C31.9552 53.1523 32.4747 52.6328 32.8393 51.9766C33.2221 51.3021 33.5138 50.4271 33.7143 49.3516C33.933 48.2578 34.1518 46.8633 34.3705 45.168C34.3888 44.8581 34.489 44.612 34.6713 44.4297C34.8718 44.2474 35.127 44.1562 35.4369 44.1562Z" fill="url(#starGrad)"/>
-      </svg>
+      <img class="nexus-symbol-bubble" src="https://www.figma.com/api/mcp/asset/d514567e-deb6-4aae-9311-03dc3947d6d2" alt="" />
+      <!-- Sparkle star from Figma -->
+      <img class="nexus-symbol-star" src="https://www.figma.com/api/mcp/asset/37f41e05-e313-4232-9b0e-56074fa17ecf" alt="" />
     </div>
   </div>
 
@@ -2468,17 +2457,20 @@
           <span class="card-title">تصعيد الأولويات</span>
           <span class="card-subtitle">لوحة الأولويات</span>
         </div>
-        <div class="card-icon-large">
-          <img src="https://www.figma.com/api/mcp/asset/6fd3299b-37de-42a9-992a-1ef3c6e559a5" alt="" />
+        <div class="card-icon-large" style="position:relative;">
+          <!-- 3D stacked chart bars -->
+          <img style="position:absolute;inset:9% 21% 22% 7%;object-fit:contain;" src="https://www.figma.com/api/mcp/asset/4b6ed1a0-5e22-471a-92ed-77c4b8170e61" alt="" />
+          <!-- Up arrow overlay -->
+          <img style="position:absolute;top:21%;left:18%;width:24px;height:24px;object-fit:contain;" src="https://www.figma.com/api/mcp/asset/f63ebea4-3dce-460c-ad20-072608ee038f" alt="" />
         </div>
       </div>
-      <div class="shortcut-card" id="morningBriefBtn">
+      <div class="shortcut-card card-morning" id="morningBriefBtn">
         <div class="card-text">
           <span class="card-title">ملخص الصباح</span>
           <span class="card-subtitle">بنود اليوم</span>
         </div>
         <div class="card-icon">
-          <img src="https://www.figma.com/api/mcp/asset/6ae17686-397f-465c-8bcc-4b295b4a515d" alt="" />
+          <img src="https://www.figma.com/api/mcp/asset/1d322bc0-f2ce-4562-afda-0fc437896653" alt="" />
         </div>
       </div>
     </div>
@@ -2490,21 +2482,16 @@
           <span class="card-subtitle">تخصيص المهام</span>
         </div>
         <div class="card-icon">
-          <img src="https://www.figma.com/api/mcp/asset/24a45319-19f7-4e0d-a0de-2b083538698a" alt="" />
+          <img src="https://www.figma.com/api/mcp/asset/eb6f8e07-a93b-4fca-b5d8-bf76d8ec8d88" alt="" />
         </div>
       </div>
-      <div class="shortcut-card">
+      <div class="shortcut-card card-overdue">
         <div class="card-text">
           <span class="card-title">بنود المتأخرة</span>
           <span class="card-subtitle">تستدعي الاهتمام</span>
         </div>
         <div class="card-icon">
-          <svg width="21" height="21" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.58334 14.4998C6.58334 11.5145 6.58334 10.0214 7.51118 9.09434C8.43901 8.1673 9.9313 8.1665 12.9167 8.1665H16.0833C19.0687 8.1665 20.5618 8.1665 21.4888 9.09434C22.4159 10.0222 22.4167 11.5145 22.4167 14.4998V16.0832C22.4167 19.0685 22.4167 20.5616 21.4888 21.4887C20.561 22.4157 19.0687 22.4165 16.0833 22.4165H12.9167C9.9313 22.4165 8.43822 22.4165 7.51118 21.4887C6.58414 20.5608 6.58334 19.0685 6.58334 16.0832V14.4998Z" stroke="#262626" stroke-width="1.5"/>
-            <path d="M15.9999 18.4998C16.133 18.4967 16.2655 18.5204 16.3894 18.5692C16.5133 18.6181 16.6262 18.6913 16.7214 18.7844C16.8167 18.8775 16.8924 18.9887 16.9441 19.1114C16.9958 19.2342 17.0224 19.366 17.0225 19.4993C17.0225 19.6325 16.9959 19.7643 16.9443 19.8871C16.8927 20.0099 16.817 20.1211 16.7218 20.2143C16.6266 20.3074 16.5137 20.3806 16.3898 20.4296C16.2659 20.4785 16.1335 20.5022 16.0004 20.4993C15.7391 20.4935 15.4904 20.3856 15.3077 20.1988C15.1249 20.012 15.0225 19.7611 15.0225 19.4998C15.0224 19.2384 15.1246 18.9874 15.3073 18.8005C15.49 18.6136 15.7386 18.5057 15.9999 18.4998ZM15.9999 13.4998C16.1988 13.4998 16.3895 13.5788 16.5302 13.7194C16.6708 13.8601 16.7499 14.0508 16.7499 14.2498V17.2498C16.7499 17.4487 16.6708 17.6394 16.5302 17.7801C16.3895 17.9207 16.1988 17.9998 15.9999 17.9998C15.8009 17.9998 15.6102 17.9207 15.4695 17.7801C15.3289 17.6394 15.2499 17.4487 15.2499 17.2498V14.2498C15.2499 14.0508 15.3289 13.8601 15.4695 13.7194C15.6102 13.5788 15.8009 13.4998 15.9999 13.4998Z" fill="#C0392B"/>
-            <path d="M6.58334 12.1249H22.4167" stroke="#6B6B6B" stroke-width="1.5" stroke-linecap="round"/>
-            <path d="M10.5417 8.1665V6.979M18.4584 8.1665V6.979" stroke="#C0392B" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
+          <img src="https://www.figma.com/api/mcp/asset/808fb77d-2bbc-4856-b6d1-aa178427ac2e" alt="" />
         </div>
       </div>
     </div>
@@ -2517,11 +2504,11 @@
   <div class="ask-bar-wrapper">
     <div class="ask-bar-container">
       <div class="ask-bar-bg"></div>
-      <div class="ask-bar-label">اسأل نيكسس .....</div>
       <!-- Input area -->
-      <input type="text" class="ask-bar-input" id="homeInput" placeholder="اكتب هنا..." />
+      <input type="text" class="ask-bar-input" id="homeInput" placeholder="" />
+      <div class="ask-bar-label">اسأل نيكسس .....</div>
       <!-- Mic button -->
-      <div class="ask-bar-btn ask-bar-mic">
+      <div class="ask-bar-btn ask-bar-mic" id="homeMicBtn">
         <svg width="14" height="18" viewBox="0 0 14 18" fill="none">
           <rect x="4.5" y="1" width="5" height="9" rx="2.5" stroke="#262626" stroke-width="1.4"/>
           <path d="M1.5 9C1.5 12.0376 4.02944 14.5 7 14.5C9.97056 14.5 12.5 12.0376 12.5 9" stroke="#262626" stroke-width="1.4" stroke-linecap="round"/>
@@ -2535,6 +2522,13 @@
           <rect x="4"  y="0" width="2.5" height="12" rx="1.25" fill="#262626"/>
           <rect x="8"  y="3" width="2.5" height="6"  rx="1.25" fill="#262626"/>
           <rect x="12" y="1" width="2.5" height="10" rx="1.25" fill="#262626"/>
+        </svg>
+      </div>
+      <!-- Add file button -->
+      <div class="ask-bar-btn ask-bar-add">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <line x1="7" y1="1" x2="7" y2="13" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="1" y1="7" x2="13" y2="7" stroke="#262626" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       </div>
     </div>
@@ -3111,8 +3105,9 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
   });
   // ── Home screen inline chat ──
   const mainBtns  = document.getElementById('mainBtns');
-  const homeChat  = document.getElementById('homeChat');
-  const homeInput = document.getElementById('homeInput');
+  const homeChat      = document.getElementById('homeChat');
+  const homeInput     = document.getElementById('homeInput');
+  const homeBarLabel  = homeInput.nextElementSibling; // .ask-bar-label
 
   function showHomeChat() {
     mainBtns.classList.add('hidden');
@@ -3120,6 +3115,7 @@ Keep responses concise (3 lines max), professional, and action-oriented. You are
   }
 
   homeInput.addEventListener('input', () => {
+    homeBarLabel.style.display = homeInput.value ? 'none' : '';
     if (homeInput.value.trim()) showHomeChat();
   });
 
