@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS · الملخص الصباحي</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --dark-gray: #263238;
+      --light-gray: #78777C;
+      --color-bg: #F7F7F8;
+      --color-surface: #FFFFFF;
+      --color-critical: #8B1515;
+      --color-critical-bg: #FDECEA;
+      --color-elevated: #2B6CB0;
+      --color-elevated-bg: #EBF2FA;
+      --line-sep: #EEEEEE;
+      --corner-sm: 8px;
+      --corner-xs: 4px;
+      --grad: linear-gradient(-20.41deg, rgb(86, 37, 202) 15.621%, rgb(63, 141, 229) 40.131%, rgb(17, 239, 196) 103%);
+      --font-ar: 'Noto Sans Arabic', 'Inter', sans-serif;
+      --font-sf: -apple-system, 'SF Pro', 'SF Pro Text', BlinkMacSystemFont, sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-ar);
+      background: #CDD0D8;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── PHONE ── */
+    .phone {
+      width: 402px;
+      height: 874px;
+      border-radius: 61px;
+      overflow: hidden;
+      position: relative;
+      background: radial-gradient(101.29% 118.6% at 50% 50%, #D6EFFF 0%, #F5F5F5 50%, #F5F5F5 100%);
+      box-shadow: 0 50px 100px rgba(0, 0, 0, .32), 0 0 0 1px rgba(0, 0, 0, .08);
+      flex-shrink: 0;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    /* ── SF SYMBOL ── */
+    /* These unicode codepoints are in SF Pro's Private Use Area.
+   On iOS/macOS they render as SF Symbols glyphs.
+   On other platforms they fall back gracefully. */
+    .sf {
+      font-family: var(--font-sf);
+      font-weight: 500;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-style: normal;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sf-grad {
+      font-family: var(--font-sf);
+      font-weight: 500;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── STATUS BAR — iOS chrome, always LTR ── */
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 21px 24px 19px;
+      direction: ltr;
+    }
+
+    .sb-time {
+      font-family: var(--font-sf);
+      font-weight: 600;
+      font-size: 17px;
+      color: #000;
+      letter-spacing: -.2px;
+    }
+
+    .sb-icons {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    /* ── NAV BAR — iOS chrome, LTR: hamburger LEFT, title CENTER, avatar RIGHT ── */
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px 10px;
+      position: relative;
+      direction: ltr;
+    }
+
+    .nav-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-sf);
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: -.43px;
+      white-space: nowrap;
+    }
+
+    .nav-menu-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 296px;
+      background: rgba(255, 255, 255, .65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, .12);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-menu-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: #ddd;
+      mix-blend-mode: color-burn;
+    }
+
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 18px;
+    }
+
+    .menu-line {
+      height: 1.5px;
+      background: #262626;
+      border-radius: 1px;
+    }
+
+    .nav-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 9999px;
+      overflow: hidden;
+      box-shadow: 0 0 0 2px white, 1px 1px 5px rgba(0, 0, 0, .32);
+    }
+
+    .nav-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .nav-avatar-fallback {
+      width: 44px;
+      height: 44px;
+      background: #8B3A3A;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    /* ── DATE PICKER — LTR: ‹ PREV [date] NEXT ›
+   Figma: left pill = Arrow-Down rotated 90° = chevron LEFT = previous date
+          right pill = Arrow-Down rotated 270° = chevron RIGHT = next date    ── */
+    .date-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 0 16px 8px;
+      direction: ltr;
+    }
+
+    .date-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 32px;
+      border: 1px solid var(--line-sep);
+      background: var(--color-surface);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, .04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .15s, transform .1s;
+    }
+
+    .date-arrow:active {
+      transform: scale(.88);
+      background: #f0f0f0;
+    }
+
+    .date-pill {
+      background: var(--color-surface);
+      border-radius: 78px;
+      height: 32px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, .04);
+      flex-shrink: 0;
+    }
+
+    .date-main {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark-gray);
+      letter-spacing: -.26px;
+    }
+
+    .date-sub {
+      font-size: 12px;
+      color: #A0A0A0;
+      letter-spacing: -.24px;
+    }
+
+    /* ── GREETING ── */
+    .greeting {
+      padding: 8px 24px 4px;
+      text-align: center;
+      direction: rtl;
+    }
+
+    .greeting-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark-gray);
+      line-height: 42px;
+    }
+
+    .greeting-sub {
+      font-size: 14px;
+      color: var(--dark-gray);
+      line-height: 23.9px;
+    }
+
+    /* ── SEGMENTED CONTROL — LTR (list LEFT, card RIGHT per Figma) ── */
+    .seg-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 8px 16px 14px;
+      direction: ltr;
+    }
+
+    .seg-ctl {
+      width: 128px;
+      height: 42px;
+      border-radius: 100px;
+      border: 1px solid var(--color-surface);
+      background: transparent;
+      display: flex;
+      gap: 4px;
+      padding: 2px;
+    }
+
+    .seg-btn {
+      flex: 1;
+      border: none;
+      border-radius: 20px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s, box-shadow .2s;
+      font-size: 15px;
+      color: #000;
+      padding: 4px;
+    }
+
+    .seg-btn.active {
+      background: var(--color-surface);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+    }
+
+    /* ── CARD STACK — exact Figma inset percentages ── */
+    .stack-wrap {
+      position: absolute;
+      top: 334px;
+      left: 16px;
+      width: 371px;
+      height: 377px;
+      overflow: hidden;
+    }
+
+    .card {
+      position: absolute;
+      background: var(--color-surface);
+      border-radius: 8px;
+      box-shadow: 0 7px 14px rgba(0, 0, 0, .04);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      direction: rtl;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .4s cubic-bezier(.23, 1, .32, 1), opacity .35s ease;
+    }
+
+    /* Background cards — no pointer events, overflow hidden */
+    .card-bg {
+      pointer-events: none;
+      overflow: hidden;
+      border: none;
+    }
+
+    /* Figma inset percentages → absolute positions */
+    .card-bg-3 {
+      /* inset: 13.94% 9.97% 0 10.51% */
+      top: 47px;
+      left: 39px;
+      right: 37px;
+      bottom: 0;
+      opacity: .42;
+    }
+
+    .card-bg-2 {
+      /* inset: 10.38% 7.01% 3.56% 7.01% */
+      top: 35px;
+      left: 26px;
+      right: 26px;
+      bottom: 12px;
+      opacity: .64;
+    }
+
+    .card-bg-1 {
+      /* inset: 5.34% 4.04% 8.6% 2.7% */
+      top: 18px;
+      left: 10px;
+      right: 15px;
+      bottom: 29px;
+      opacity: .86;
+    }
+
+    /* Top card — inset: 0 0 13.94% 0 */
+    .card-top {
+      /*top:0*/
+      ;
+      left: 0;
+      right: 0;
+      bottom: 47px;
+      z-index: 10;
+      cursor: grab;
+      transition: transform .4s cubic-bezier(.23, 1, .32, 1), opacity .35s ease;
+    }
+
+    .card-top.no-transition {
+      transition: none !important;
+    }
+
+    .card-top:active {
+      cursor: grabbing;
+    }
+
+    /* Swipe animations */
+    .card-top.swipe-left {
+      transform: translateX(-140%) rotate(-12deg) !important;
+      opacity: 0 !important;
+    }
+
+    .card-top.swipe-right {
+      transform: translateX(140%) rotate(12deg) !important;
+      opacity: 0 !important;
+    }
+
+    /* ── CARD CONTENT — RTL ── */
+
+    /* Status + Priority: priority FIRST → RIGHT, time SECOND → LEFT */
+    .card-status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .priority-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 16px;
+      padding: 4px 8px;
+      height: 24px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .priority-critical {
+      background: #FFD9D7;
+      color: var(--color-critical);
+    }
+
+    .priority-high {
+      background: #FEFCBF;
+      color: #B7791F;
+    }
+
+    .priority-medium {
+      background: #FEFCBF;
+      color: #B7791F;
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border-radius: 16px;
+      padding: 4px 6px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .time-late {
+      background: var(--color-critical-bg);
+      border: 1px solid var(--color-critical-bg);
+      color: var(--color-critical);
+    }
+
+    .time-ok {
+      background: var(--color-elevated-bg);
+      color: var(--color-elevated);
+    }
+
+    /* Task title */
+    .task-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark-gray);
+      text-align: right;
+      line-height: normal;
+      width: 100%;
+    }
+
+    /* Meta: assignee FIRST → RIGHT, deadline SECOND → LEFT */
+    .meta-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      width: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      direction: rtl;
+    }
+
+    .meta-col {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex: 1;
+    }
+
+    .meta-col-a {
+      justify-content: flex-start;
+    }
+
+    /* start in RTL = RIGHT */
+    .meta-col-d {
+      justify-content: flex-end;
+    }
+
+    /* end in RTL = LEFT */
+    .meta-label {
+      font-size: 10px;
+      color: var(--light-gray);
+    }
+
+    .meta-value {
+      font-size: 12px;
+      color: var(--dark-gray);
+    }
+
+    /* Progress */
+    .progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--color-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      padding: 1px 2px;
+    }
+
+    .progress-fill {
+      height: 6px;
+      border-radius: 8px;
+      background: var(--grad);
+    }
+
+    /* pct FIRST → RIGHT, ai-text SECOND → LEFT */
+    .progress-bottom {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 4px;
+      direction: rtl;
+    }
+
+    .progress-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark-gray);
+      flex-shrink: 0;
+    }
+
+    .ai-state-txt {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark-gray);
+      text-align: right;
+    }
+
+    /* Risk insight: nexus FIRST → RIGHT, text SECOND → LEFT */
+    .risk-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      direction: rtl;
+      background: var(--color-bg);
+      padding: 8px;
+      border-radius: var(--corner-xs);
+      width: 100%;
+    }
+
+    .nexus-dot {
+      width: 21px;
+      height: 21px;
+      border-radius: 16px;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 9px;
+      color: white;
+      font-family: var(--font-sf);
+      box-shadow: 0 4px 4px rgba(0, 0, 0, .05);
+    }
+
+    .risk-txt {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--light-gray);
+      text-align: right;
+      line-height: 20px;
+    }
+
+    /* Recommendation: label FIRST → RIGHT, text SECOND → LEFT */
+    .rec-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      direction: rtl;
+      background: var(--color-bg);
+      padding: 8px;
+      border-radius: var(--corner-xs);
+      width: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 20px;
+    }
+
+    .rec-label {
+      color: var(--light-gray);
+      flex-shrink: 0;
+    }
+
+    .rec-txt {
+      flex: 1;
+      color: var(--dark-gray);
+      text-align: right;
+    }
+
+    /* Action buttons: LTR visual order per Figma: تجاهل | اسأل | صعّد | إعادة تعيين */
+    .action-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      direction: ltr;
+      /* LTR so visual order matches Figma screenshot */
+    }
+
+    .act-btn {
+      flex: 1;
+      height: 44px;
+      background: var(--color-surface);
+      border: 1px solid var(--line-sep);
+      border-radius: var(--corner-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      padding: 8px;
+      transition: background .15s, transform .12s;
+      direction: rtl;
+      outline: none;
+    }
+
+    .act-btn:active {
+      transform: scale(.92);
+      background: #f7f7f7;
+    }
+
+    .act-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark-gray);
+      white-space: nowrap;
+      font-family: var(--font-ar);
+    }
+
+    /* ── LIST VIEW ── */
+    .list-view {
+      display: none;
+      position: absolute;
+      top: 362px;
+      left: 16px;
+      width: 371px;
+      bottom: 100px;
+      overflow-y: auto;
+      flex-direction: column;
+      gap: 10px;
+      direction: rtl;
+    }
+
+    .list-view.visible {
+      display: flex;
+    }
+
+    .list-card {
+      background: var(--color-surface);
+      border-radius: 8px;
+      box-shadow: 0 7px 14px rgba(0, 0, 0, .04);
+      padding: 12px 14px;
+      display: flex;
+      gap: 10px;
+      direction: rtl;
+      cursor: pointer;
+      transition: transform .15s;
+      flex-shrink: 0;
+    }
+
+    .list-card:active {
+      transform: scale(.98);
+    }
+
+    .list-bar {
+      width: 0px;
+      border-radius: 2px;
+      align-self: stretch;
+      flex-shrink: 0;
+      min-height: 50px;
+    }
+
+    .list-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .list-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .list-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark-gray);
+      flex: 1;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .list-meta {
+      font-size: 11px;
+      color: var(--light-gray);
+      text-align: right;
+    }
+
+    .list-prog-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      direction: ltr;
+    }
+
+    .list-prog-track {
+      flex: 1;
+      height: 4px;
+      background: var(--color-bg);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .list-prog-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--grad);
+    }
+
+    .list-pct {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--dark-gray);
+    }
+
+    .list-ai {
+      font-size: 10px;
+      color: var(--light-gray);
+      text-align: right;
+    }
+
+    /* ── BOTTOM AREA — LTR layout ── */
+    .bottom-area {
+      position: absolute;
+      bottom: 34px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      direction: ltr;
+    }
+
+    /* [‹ prev] [إغلاق الملخص الصباحي] [next ›] */
+    .bottom-nav-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Prev / Next circle buttons — same style as date-arrow pills */
+    .nav-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--line-sep);
+      background: var(--color-surface);
+      box-shadow: 0 3px 5px rgba(0, 0, 0, .04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .15s, transform .12s;
+    }
+
+    .nav-circle:active {
+      transform: scale(.88);
+      background: #f0f0f0;
+    }
+
+    /* Close brief pill — Figma: 157×38px, transparent bg, white border */
+    .close-btn {
+      width: 157px;
+      height: 38px;
+      border-radius: 100px;
+      border: 1px solid var(--color-surface);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background .2s, transform .12s;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, .25);
+    }
+
+    .close-btn:active {
+      transform: scale(.96);
+    }
+
+    .close-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark-gray);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 125px;
+      font-family: var(--font-ar);
+    }
+
+    /* Counters: "٣ متبقية" LEFT, "١/٤" RIGHT */
+    .bottom-counters {
+      display: flex;
+      justify-content: space-between;
+      width: 250px;
+    }
+
+    .bottom-count {
+      font-size: 10px;
+      font-weight: 500;
+      color: #6B6B6B;
+      font-family: var(--font-ar);
+    }
+
+    /* ── HOME INDICATOR ── */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 144px;
+      height: 5px;
+      background: #000;
+      border-radius: 100px;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 13px;
+      font-family: var(--font-ar);
+      padding: 10px 18px;
+      border-radius: 20px;
+      z-index: 9999;
+      direction: rtl;
+      opacity: 0;
+      transition: opacity .25s;
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* === UX FIX: icon on right, text after === */
+    .priority-badge,
+    .time-badge {
+      flex-direction: row-reverse;
+    }
+
+    .act-btn {
+      flex-direction: row-reverse;
+    }
+
+
+    /* === TRUE STACKED MODE === */
+    .stack-wrap.stacked {
+      height: auto;
+      overflow: visible;
+      position: relative;
+    }
+
+    .stack-wrap.stacked .card {
+      position: relative !important;
+      transform: none !important;
+      opacity: 1 !important;
+      margin-top: -140px;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+
+    .stack-wrap.stacked .card:nth-child(1) {
+      z-index: 4;
+      transform: scale(1);
+    }
+
+    .stack-wrap.stacked .card:nth-child(2) {
+      z-index: 3;
+      transform: scale(0.96);
+    }
+
+    .stack-wrap.stacked .card:nth-child(3) {
+      z-index: 2;
+      transform: scale(0.92);
+    }
+
+    .stack-wrap.stacked .card:nth-child(4) {
+      z-index: 1;
+      transform: scale(0.88);
+    }
+
+    .stack-wrap.stacked .card-bg {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="phone" id="phone">
+
+    <!-- STATUS BAR (LTR: time LEFT, icons RIGHT) -->
+    <div class="statusbar">
+      <span class="sb-time">٦:٢٠</span>
+      <div class="sb-icons">
+        <!-- Cellular -->
+        <svg width="20" height="13" viewBox="0 0 20 13" fill="none">
+          <rect x="0" y="4" width="3" height="9" rx="1" fill="#000" opacity=".35" />
+          <rect x="4.5" y="2.5" width="3" height="10.5" rx="1" fill="#000" opacity=".55" />
+          <rect x="9" y="0" width="3" height="13" rx="1" fill="#000" />
+          <rect x="13.5" y="0" width="3" height="13" rx="1" fill="#000" opacity=".25" />
+        </svg>
+        <!-- WiFi -->
+        <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+          <path
+            d="M8.5 4.5C6.3 4.5 4.3 5.4 2.9 6.9L1.5 5.5C3.3 3.6 5.8 2.5 8.5 2.5s5.2 1.1 7 3L14.1 6.9C12.7 5.4 10.7 4.5 8.5 4.5z"
+            fill="#000" />
+          <path
+            d="M8.5 7.5c-1.4 0-2.7.6-3.6 1.5L3.5 7.6C4.7 6.3 6.5 5.5 8.5 5.5s3.8.8 5 2.1l-1.4 1.4C11.2 8.1 9.9 7.5 8.5 7.5z"
+            fill="#000" />
+          <circle cx="8.5" cy="11.5" r="1.5" fill="#000" />
+        </svg>
+        <!-- Battery -->
+        <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+          <rect x="0" y="1" width="23" height="11" rx="3.5" stroke="#000" stroke-width="1" fill="none" opacity=".35" />
+          <rect x="1.5" y="2.5" width="17" height="8" rx="2" fill="#000" />
+          <rect x="24" y="4.5" width="2.5" height="4" rx="1.25" fill="#000" opacity=".4" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- NAV BAR (LTR: hamburger LEFT, "نيكسس" CENTER, avatar RIGHT) -->
+    <div class="navbar">
+      <button class="nav-menu-btn" aria-label="القائمة">
+        <div class="menu-icon">
+          <div class="menu-line"></div>
+          <div class="menu-line"></div>
+          <div class="menu-line" style="width:12px"></div>
+        </div>
+      </button>
+      <span class="nav-title">نيكسس</span>
+      <div class="nav-avatar">
+        <img src="https://www.figma.com/api/mcp/asset/66cccfd9-db44-4576-9c35-4f60e305c347" alt="خالد"
+          onerror="this.parentElement.innerHTML='<div class=nav-avatar-fallback>خ</div>'">
+      </div>
+    </div>
+
+    <!-- DATE PICKER (LTR)
+       LEFT button  ‹ = chevron pointing LEFT  = previous date (Figma: Arrow-Down rotate 90° = ←)
+       RIGHT button › = chevron pointing RIGHT = next date     (Figma: Arrow-Down rotate 270° = →) -->
+    <div class="date-picker-row">
+      <button class="date-arrow" onclick="changeDate(-1)" aria-label="اليوم السابق">
+        <!-- Chevron LEFT — previous date -->
+        <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+          <path d="M7 1.5L1.5 6.5L7 11.5" stroke="#444" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="date-pill">
+        <span class="date-main" id="dateText">١٨ مارس ٢٠٢٦</span>
+        <span class="date-sub" id="dateLabel">اليوم</span>
+      </div>
+      <button class="date-arrow" onclick="changeDate(1)" aria-label="اليوم التالي">
+        <!-- Chevron RIGHT — next date -->
+        <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+          <path d="M1 1.5L6.5 6.5L1 11.5" stroke="#444" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- GREETING -->
+    <div class="greeting">
+      <div class="greeting-title">الملخص الصباحي</div>
+      <div class="greeting-sub">صباح الخير, خالد .لديك ٤ بنود تستدعي قراراً اليوم.</div>
+    </div>
+
+    <!-- iOS SEGMENTED CONTROL (LTR: list LEFT, card RIGHT)
+       SF Symbols from Figma: list = U+1002F2, card = U+10040B  -->
+    <div class="seg-wrap">
+      <div class="seg-ctl">
+        <button class="seg-btn" id="segList" onclick="switchView('list')" aria-label="عرض قائمة">
+          <!-- SF Symbol: rectangle.grid.1x2 -->
+          <span class="sf" style="font-size:16px">&#x1002F2;</span>
+        </button>
+        <button class="seg-btn active" id="segCard" onclick="switchView('cards')" aria-label="عرض بطاقات">
+          <!-- SF Symbol: rectangle.on.rectangle -->
+          <span class="sf" style="font-size:16px">&#x10040B;</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- CARD STACK -->
+    <div class="stack-wrap" id="stackWrap">
+
+      <div class="card card-bg card-bg-3"></div>
+      <div class="card card-bg card-bg-2"></div>
+      <div class="card card-bg card-bg-1"></div>
+      <div class="card card-top" id="topCard"></div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div class="list-view" id="listView">
+      <div class="priority-badge priority-critical">
+        بالغة الأهمية
+        <span class="sf" style="font-size:12px">􀋦</span>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM AREA
+       Row: [‹ prev] [إغلاق الملخص الصباحي] [next ›]
+       Below: [٣ متبقية] ··· [١/٤] -->
+    <div class="bottom-area">
+      <div class="bottom-nav-row">
+        <!-- Prev: chevron LEFT -->
+        <button class="nav-circle" onclick="prevCard()" aria-label="البطاقة السابقة">
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+            <path d="M7 1.5L1.5 6.5L7 11.5" stroke="#555" stroke-width="1.7" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <button class="close-btn" onclick="closeBrief()">
+          <span class="close-label">إغلاق الملخص الصباحي</span>
+        </button>
+
+        <!-- Next: chevron RIGHT -->
+        <button class="nav-circle" onclick="nextCard()" aria-label="البطاقة التالية">
+          <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+            <path d="M1 1.5L6.5 6.5L1 11.5" stroke="#555" stroke-width="1.7" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="bottom-counters">
+        <span class="bottom-count" id="cntRemaining">٤ متبقية</span>
+        <span class="bottom-count" id="cntIndex">٤/٠</span>
+      </div>
+    </div>
+
+    <div class="home-indicator"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script>
+    /* ═══ DATA ═══ */
+    const TASKS = [
+      {
+        /* SF Symbol: bolt.fill U+1002E6 */
+        prioritySf: '&#x1002E6;',
+        priority: 'critical', priorityLabel: 'بالغة الأهمية',
+        status: 'late', statusLabel: 'متأخر يومان',
+        /* SF Symbol: clock.fill U+10042C */
+        statusSf: '&#x10042C;',
+        title: 'مراجعة عقد المشتريات',
+        assignee: 'أحمد الحوسني', deadline: 'الخميس',
+        progress: 25,
+        aiState: 'معرضة للتأخير — بانتظار رد المورد',
+        risk: 'قد يحدث تأخير إذا لم يتم الرد خلال 24 ساعة',
+        rec: '• تصعيد المهمة     • متابعة مباشرة مع المورد'
+      },
+      {
+        priority: 'critical', priorityLabel: 'بالغة الأهمية',
+        prioritySf: '&#x1002E6;',
+        status: 'late', statusLabel: 'متأخر يوماً',
+        statusSf: '&#x10042C;',
+        title: 'قرارات مجلس الإدارة · فبراير',
+        assignee: 'مريم الزعابي', deadline: 'الخميس',
+        progress: 25,
+        aiState: 'Needs Confirmation — قرارات تنتظر تصويت الأقسام',
+        risk: 'احتمال تأخير خلال ٤٨ ساعة بدون تحديث البيانات',
+        rec: '• مراجعة القرارات     • تنسيق مع الأقسام'
+      },
+      {
+        priority: 'high', priorityLabel: 'أولوية عالية',
+        /* SF Symbol: arrow.up U+100180 */
+        prioritySf: '&#x100180;',
+        status: 'ok', statusLabel: 'الجمعة',
+        statusSf: '&#x10042C;',
+        title: 'إطلاق المنصة الرقمية',
+        assignee: 'نورة الشامسي', deadline: 'غداً',
+        progress: 55,
+        aiState: 'Pending Input — بانتظار اعتماد القيادة',
+        risk: 'يعتمد على اعتماد نهائي من مكتب المدير العام',
+        rec: '• الحصول على الاعتماد     • التنسيق مع فريق الإطلاق'
+      },
+      {
+        priority: 'medium', priorityLabel: 'أولوية متوسطة',
+        prioritySf: '&#x100180;',
+        status: 'ok', statusLabel: 'الأحد',
+        statusSf: '&#x10042C;',
+        title: 'تحديث تقرير الأداء الشهري',
+        assignee: 'سارة الكعبي', deadline: 'الأحد',
+        progress: 60,
+        aiState: 'Delegated — ضمن الجدول الزمني',
+        risk: 'لا مخاطر فورية — مراجعة أسبوعية كافية',
+        rec: '• المتابعة نهاية الأسبوع'
+      }
+    ];
+
+    const AR = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const toAr = n => String(n).replace(/\d/g, d => AR[+d]);
+
+    let idx = 0, view = 'cards';
+    const dismissed = new Set();
+    const live = () => TASKS.filter((_, i) => !dismissed.has(i));
+
+    /* ═══ COUNTER ═══ */
+    function updateCounters() {
+      const remaining = TASKS.length - dismissed.size;
+
+      document.getElementById('cntRemaining').textContent =
+        remaining > 0 ? `${toAr(remaining)} متبقية` : '٠ متبقية';
+
+      const l = live();
+      const total = TASKS.length;
+      const pos = l.length ? Math.min(idx + 1, l.length) : 0;
+
+      document.getElementById('cntIndex').textContent =
+        `${toAr(pos)}/${toAr(total)}`;
+    }
+
+    /* ═══ RENDER CARD ═══ */
+    function renderCard(t) {
+      if (!t) return `<div style="display:flex;flex-direction:column;align-items:center;
+    justify-content:center;height:100%;gap:12px;padding:32px 16px">
+    <div style="font-size:36px">✅</div>
+    <div style="font-size:16px;font-weight:700;color:var(--dark-gray);text-align:center">تمت مراجعة جميع البنود</div>
+    <div style="font-size:13px;color:var(--light-gray);text-align:center">أنت مستعد لاجتماع الساعة ٨</div>
+    </div>`;
+
+      const pc = t.priority === 'critical' ? 'priority-critical' : t.priority === 'high' ? 'priority-high' : 'priority-medium';
+      const sc = t.status === 'late' ? 'time-late' : 'time-ok';
+
+      /* SF Symbol codepoints from Figma action buttons:
+         تجاهل = eye          U+1002EF
+         اسأل  = nexus star   U+103230
+         صعّد  = arrow.up.fill U+101FA9
+         إعادة تعيين = person.badge.plus U+10026F */
+      return `
+    <div class="card-status-row">
+      <div class="priority-badge ${pc}">
+        ${t.priorityLabel}
+        <span class="sf" style="font-size:12px">${t.prioritySf}</span>
+      </div>
+      <div class="time-badge ${sc}">
+        ${t.statusLabel}
+        <span class="sf" style="font-size:11px">${t.statusSf}</span>
+      </div>
+    </div>
+
+    <div class="task-title">${t.title}</div>
+
+    <div class="meta-row">
+      <div class="meta-col meta-col-a">
+        <span class="meta-value">${t.assignee}</span>
+        <span class="meta-label">المسؤول</span>
+      </div>
+      <div class="meta-col meta-col-d">
+        <span class="meta-value">${t.deadline}</span>
+        <span class="meta-label">الموعد النهائي</span>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-track">
+        <div class="progress-fill" style="width:${t.progress}%"></div>
+      </div>
+      <div class="progress-bottom">
+        <span class="progress-pct"> ${toAr(t.progress)}٪</span>
+        <span class="ai-state-txt">${t.aiState}</span>
+      </div>
+    </div>
+
+    <div class="risk-row">
+      <div class="nexus-dot">
+        <span class="sf" style="font-size:9px;color:white">&#x103230;</span>
+      </div>
+      <span class="risk-txt"> ${t.risk}</span>
+    </div>
+
+    <div class="rec-row">
+      <span class="rec-label">التوصية</span>
+      <span class="rec-txt"> ${t.rec}</span>
+    </div>
+
+    <div class="action-row">
+      <button class="act-btn" onclick="event.stopPropagation();dismissCurrent()">
+        <span class="act-label">تجاهل</span>
+        <span class="sf-grad" style="font-size:14px">&#x1002EF;</span>
+      </button>
+      <button class="act-btn" onclick="event.stopPropagation();askNexus()">
+        <span class="act-label">اسأل</span>
+        <span style="width:16px;height:16px;border-radius:50%;background:var(--grad);
+          display:inline-flex;align-items:center;justify-content:center;
+          font-size:8px;color:white;flex-shrink:0;font-family:var(--font-sf)">&#x103230;</span>
+      </button>
+      <button class="act-btn" onclick="event.stopPropagation();escalate()">
+        <span class="act-label">صعّد</span>
+        <span class="sf-grad" style="font-size:14px">&#x101FA9;</span>
+      </button>
+      <button class="act-btn" style="flex:none;padding:8px 10px" onclick="event.stopPropagation();reassign()">
+        <span class="act-label">إعادة تعيين</span>
+        <span class="sf-grad" style="font-size:14px">&#x10026F;</span>
+      </button>
+    </div>`;
+    }
+
+    /* ═══ REFRESH ═══ */
+    function refresh() {
+      const el = document.getElementById('topCard');
+      el.style.transform = ''; el.style.opacity = '';
+      const l = live();
+      el.innerHTML = renderCard(l.length ? l[idx % l.length] : null);
+    }
+
+    /* ═══ NAVIGATION ═══ */
+    function nextCard() {
+      const l = live(); if (l.length < 2) return;
+      const el = document.getElementById('topCard');
+      el.classList.add('swipe-right');
+      setTimeout(() => { el.classList.remove('swipe-right'); idx = (idx + 1) % l.length; refresh(); updateCounters(); }, 380);
+    }
+    function prevCard() {
+      const l = live(); if (l.length < 2) return;
+      idx = (idx - 1 + l.length) % l.length; refresh(); updateCounters();
+    }
+    function dismissCurrent() {
+      const l = live(); if (!l.length) return;
+      const el = document.getElementById('topCard');
+      el.classList.add('swipe-left');
+      setTimeout(() => {
+        el.classList.remove('swipe-left');
+        const ri = TASKS.indexOf(l[idx % l.length]);
+        dismissed.add(ri);
+        const nl = live();
+        if (nl.length) idx = idx % nl.length;
+        refresh(); updateCounters(); renderListView();
+        if (dismissed.size === TASKS.length) {
+          showToast('تمت مراجعة جميع البنود ✔️');
+        }
+      }, 380);
+    }
+
+    /* ═══ DRAG TO SWIPE — no gray line via overflow:hidden + rAF ═══ */
+    let sx = 0, sy = 0, drag = false, raf = null, dx = 0;
+    const tc = document.getElementById('topCard');
+
+    tc.addEventListener('pointerdown', e => {
+      if (e.target.closest('button')) return;
+      sx = e.clientX; sy = e.clientY; drag = true; dx = 0;
+      tc.classList.add('no-transition');
+      tc.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    }, { passive: false });
+
+    tc.addEventListener('pointermove', e => {
+      if (!drag) return;
+      dx = e.clientX - sx;
+      const dy = (e.clientY - sy) * .15;
+      const rot = dx * .055;
+      const opa = Math.max(.35, 1 - Math.abs(dx) / 240);
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        tc.style.transform = `translateX(${dx}px) translateY(${dy}px) rotate(${rot}deg)`;
+        tc.style.opacity = String(opa);
+      });
+    });
+
+    tc.addEventListener('pointerup', () => {
+      if (!drag) return; drag = false;
+      if (raf) cancelAnimationFrame(raf);
+      tc.classList.remove('no-transition');
+      if (dx < -80) dismissCurrent();
+      else if (dx > 80) nextCard();
+      else { tc.style.transform = ''; tc.style.opacity = ''; }
+    });
+
+    tc.addEventListener('pointercancel', () => {
+      drag = false; tc.classList.remove('no-transition');
+      tc.style.transform = ''; tc.style.opacity = '';
+    });
+    tc.addEventListener('contextmenu', e => e.preventDefault());
+    tc.addEventListener('dragstart', e => e.preventDefault());
+
+    /* ═══ ACTIONS ═══ */
+    function escalate() { const l = live(); showToast(`تم تصعيد: "${l[idx % l.length]?.title}"`); }
+    function reassign() { showToast('فتح قائمة إعادة التعيين...'); }
+    function askNexus() { const l = live(); showToast(`نيكسس يحلل: "${l[idx % l.length]?.title}"`); }
+    function closeBrief() {
+      const p = document.getElementById('phone');
+      p.style.transition = 'opacity .45s ease,transform .45s ease';
+      p.style.opacity = '0'; p.style.transform = 'scale(.93) translateY(28px)';
+      setTimeout(() => {
+        p.style.opacity = '1'; p.style.transform = '';
+        showToast('تم إغلاق الملخص الصباحي ✓');
+        setTimeout(() => { p.style.transition = ''; }, 50);
+      }, 500);
+    }
+
+    /* ═══ VIEW SWITCH ═══ */
+    function switchView(v) {
+      view = v;
+      const sw = document.getElementById('stackWrap');
+      const lv = document.getElementById('listView');
+      const sc = document.getElementById('segCard');
+      const sl = document.getElementById('segList');
+      if (v === 'cards') {
+        sw.style.display = 'block'; lv.classList.remove('visible');
+        sc.classList.add('active'); sl.classList.remove('active');
+      } else {
+        sw.style.display = 'none'; lv.classList.add('visible');
+        sl.classList.add('active'); sc.classList.remove('active');
+        renderListView();
+      }
+    }
+
+    /* ═══ LIST VIEW ═══ */
+    function renderListView() {
+      const el = document.getElementById('listView'); el.innerHTML = '';
+      TASKS.forEach((t, i) => {
+        const bc = t.priority === 'critical' ? '#8B1515' : t.priority === 'high' ? '#B7791F' : '#5B6E00';
+        const pc = t.priority === 'critical' ? 'priority-critical' : t.priority === 'high' ? 'priority-high' : 'priority-medium';
+        const st = dismissed.has(i) ? 'text-decoration:line-through;opacity:.4;' : '';
+        el.innerHTML += `<div class="list-card" style="${dismissed.has(i) ? 'opacity:.5' : ''}">
+      <div class="list-bar" style="background:${bc}"></div>
+      <div class="list-body">
+        <div class="list-top">
+          <span class="list-title" style="${st}">${t.title}</span>
+          <span class="priority-badge ${pc}" style="font-size:10px;padding:2px 7px;height:auto">${t.priorityLabel}</span>
+        </div>
+        <div class="list-meta">${t.assignee} · ${t.deadline}</div>
+        <div class="list-prog-row">
+          <div class="list-prog-track"><div class="list-prog-fill" style="width:${t.progress}%"></div></div>
+          <span class="list-pct">${toAr(t.progress)}٪</span>
+        </div>
+        <div class="list-ai">${t.aiState}</div>
+      </div></div>`;
+      });
+    }
+
+    /* ═══ DATE NAV ═══ */
+    const MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    let dateOff = 0;
+    function changeDate(dir) {
+      dateOff += dir;
+      const d = new Date(2026, 2, 18); d.setDate(d.getDate() + dateOff);
+      document.getElementById('dateText').textContent =
+        `${toAr(d.getDate())} ${MONTHS[d.getMonth()]} ${toAr(d.getFullYear())}`;
+      document.getElementById('dateLabel').textContent =
+        dateOff === 0 ? 'اليوم' : dateOff === 1 ? 'غداً' : dateOff === -1 ? 'أمس' : '';
+    }
+
+    /* ═══ TOAST ═══ */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    /* ═══ INIT ═══ */
+    refresh();
+    updateCounters();
+    renderListView();
+
+    // === FIX remaining count ===
+    function updateRemainingCount() {
+      const ignored = TASKS.filter(t => t.ignored).length;
+      const remaining = TASKS.length - ignored;
+      document.getElementById('cntRemaining').innerText = remaining + ' متبقية';
+    }
+
+    // Call after any action that may change state
+    const originalNextCard = nextCard;
+    nextCard = function () {
+      originalNextCard();
+      updateRemainingCount();
+    };
+
+    const originalPrevCard = prevCard;
+    prevCard = function () {
+      originalPrevCard();
+      updateRemainingCount();
+    };
+
+
+  </script>
+</body>
+
+</html>
